@@ -6,6 +6,7 @@
             class="white--text align-end"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             height="300px"
+            @click="details()"
             >
                 <v-card-title v-text="post.title"></v-card-title>
             </v-img>
@@ -13,7 +14,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
 
-                <v-btn icon>
+                <!-- <v-btn icon>
                     <v-icon>mdi-heart</v-icon>
                 </v-btn>
 
@@ -23,6 +24,13 @@
 
                 <v-btn icon>
                     <v-icon>mdi-share-variant</v-icon>
+                </v-btn> -->
+                <v-btn
+                    text
+                    
+                    @click="details()"
+                >
+                    Vis mer <v-icon>mdi-arrow-right</v-icon>
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -30,6 +38,7 @@
 </template>
 <script>
 import { storage } from 'firebase'
+import { mapState, mapActions } from 'vuex'
 export default {
     name: "PostView",
     data() {
@@ -47,6 +56,7 @@ export default {
         this.getUrl()
     },
     methods: {
+        ...mapActions('Posts', ['setSelectedPost']),
         getUrl() {
             const fileRef = storage().ref().child('posts/' + this.post.slug + "/" + this.post.imageName)
             fileRef.getDownloadURL().then(url => {
@@ -68,10 +78,14 @@ export default {
                 }
 
             })
-        }
+        },
+        details() {
+            this.setSelectedPost(this.post)
+            this.$router.push({name: "post-detail", params: {slug: this.selectedPost.slug }})
+        },
     },
     computed: {
-        
+        ...mapState('Posts', ['selectedPost'])
     }
 }
 </script>

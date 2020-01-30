@@ -5,6 +5,7 @@ import Login from '@/features/Accounts/Login'
 import Logout from '@/features/Accounts/Logout'
 import PostsList from '@/features/Posts/PostsList'
 import PostAdd from '@/features/Posts/PostAdd'
+import PostDetail from '@/features/Posts/PostDetail'
 import CategoryAdd from '@/features/Categories/CategoryAdd'
 import CategoriesList from '@/features/Categories/CategoriesList'
 import AuthGuard from './auth-guard'
@@ -41,6 +42,11 @@ const routes = [
     path: '/posts/add',
     name: 'posts-add',
     component: PostAdd
+  },
+  {
+    path: '/posts/:slug',
+    name: 'post-detail',
+    component: PostDetail
   },
   {
     path: '/admin/categories',

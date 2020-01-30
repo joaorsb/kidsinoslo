@@ -9,6 +9,7 @@ export default {
         lat: null,
         lng: null,
         owner: undefined,
+        author: undefined,
         category: undefined,
         language: 'no',
         slug: undefined,

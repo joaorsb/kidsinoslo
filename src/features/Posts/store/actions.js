@@ -30,7 +30,7 @@ const createPost = async ({commit}, payload) => {
             storageRef.put(image) 
         }
     }).catch(error => {
-        console.log(error)
+        alert(error)
     })
     
 }

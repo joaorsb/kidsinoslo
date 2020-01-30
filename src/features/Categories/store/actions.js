@@ -16,7 +16,7 @@ const getCategories = async ({commit}) => {
             commit('ADDCATEGORYTOLIST', category)
         })
     }).catch(err => {
-        console.log(err)
+        alert(err)
     })
 }
 
@@ -33,7 +33,7 @@ const createCategory = async ({commit}, payload) => {
 
     })
     .catch(err => {
-        console.log(err)
+        alert(err)
     })
 }
 
@@ -57,7 +57,7 @@ const editCategory = async ({commit, state}, payload) => {
     })    
     .catch(function(err) {
         commit('ADDCATEGORYTOLIST', state.selectedCategory )
-        console.error(err)
+        alert(err)
     })
 }
 
@@ -71,7 +71,7 @@ const deleteCategory = async ({commit, state}) => {
     })    
     .catch(function(err) {
         commit('ADDCATEGORYTOLIST', state.selectedCategory )
-        console.error(err)
+        alert(err)
     })
 }
 

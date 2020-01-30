@@ -45,16 +45,24 @@ export default {
         ...mapActions('Categories', ['setSelectedCategory']),
         filterAll() {
             this.setSelectedCategory(null)
-            this.$router.push('/')
+            if(this.$router.history.current.path !== '/'){
+                this.$router.push('/')
+            }
         },
         filterPaid(index) {
             const category = this.paidCategories[index]
             this.setSelectedCategory(category)
+            if(this.$router.history.current.path !== '/'){
+                this.$router.push('/')
+            }
         },
         filterFree(index) {
             const category = this.freeCategories[index]
             this.setSelectedCategory(category)
+            if(this.$router.history.current.path !== '/'){
+                this.$router.push('/')
+            }
         },
-    },  
+    }, 
 }
 </script>

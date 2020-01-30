@@ -127,8 +127,8 @@
       ...mapState('Posts', ['postsList']),
       menuItems() {
         let menuItems = [
-          { icon: "mdi-account", title: "Register", url: '/register'},
-          { icon: "mdi-login", title: "Login", url: '/login'},
+          // { icon: "mdi-account", title: "Register", url: '/register'},
+          // { icon: "mdi-login", title: "Login", url: '/login'},
          
         ]
 

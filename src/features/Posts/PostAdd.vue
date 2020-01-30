@@ -31,7 +31,7 @@
         <v-select
             :items="categoriesList"
             item-text="name"
-            item-value="slug"
+            item-value="uid"
             v-model="category"
             label="Choose Category"
             outlined
@@ -87,6 +87,7 @@ export default {
         submit(event){
             event.preventDefault()
             this.post.owner = this.loggedUser.id
+            this.post.author = this.loggedUser.name
             this.post.slug = slugfy(this.post.title)
             this.post.category = this.category
             this.post.imageName = this.photo.name
