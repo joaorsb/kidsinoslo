@@ -6,4 +6,4 @@ service cloud.firestore {
       allow write: if request.auth.uid != null;
     }
   }
-
+}
