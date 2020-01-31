@@ -31,7 +31,7 @@ const createPost = async ({commit}, payload) => {
         commit('ADDPOSTTOLIST', payload)
         commit('SETCURRENTUID', postRef.id)
         if(image) {
-            var storageRef = storage().ref().child('posts/' + payload.slug + "/" + image.name)
+            var storageRef = storage().ref().child('posts/' + payload.uid + "/" + image.name)
             storageRef.put(image) 
         }
     }).catch(error => {

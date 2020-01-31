@@ -53,12 +53,13 @@ export default {
         }
     },
     mounted() {
-        this.getUrl()
+        // this.getUrl()
     },
     methods: {
         ...mapActions('Posts', ['setSelectedPost']),
         getUrl() {
-            const fileRef = storage().ref().child('posts/' + this.post.slug + "/" + this.post.imageName)
+            const fileRef = storage().ref().child('posts/' + this.post.uid + "/" + this.post.imageName)
+
             fileRef.getDownloadURL().then(url => {
                 this.imageUrl = url
             })
@@ -88,10 +89,14 @@ export default {
         ...mapState('Posts', ['selectedPost'])
     },
     watch: {
-        post(value) {
-            if(value) {
-                this.imageUrl = ""
-                this.getUrl()
+        post: {
+            immediate: true,
+            deep: true,
+            handler: function(value) {
+                if(value) {
+                    this.imageUrl = ""
+                    this.getUrl()
+                }
             }
         }
     }
