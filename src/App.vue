@@ -70,7 +70,14 @@
       <v-container >
           <v-row class="d-flex">
             <v-col  class="hidden-xs-only " md="3" >
+              <v-list>
+                  <v-list-item @click="filterAll()">
+                      <v-list-item-title>Alle aktiviteter</v-list-item-title>
+                  </v-list-item>
+              </v-list>
+              <v-divider></v-divider>
               <categories-menu></categories-menu>
+              <neighborhood-menu></neighborhood-menu>
               <v-divider></v-divider>
               <v-list v-if="this.loggedUser && this.isAdmin">
                   <v-list-item-content>
@@ -110,8 +117,15 @@
     }),
     methods: {
       ...mapActions('Accounts', ['clearAuthError', 'setToken']),
-      ...mapActions('Categories', ['getCategories']),
-      ...mapActions('Posts', ['getPosts'])
+      ...mapActions('Categories', ['getCategories', 'setSelectedCategory']),
+      ...mapActions('Posts', ['getPosts', 'setSelectedNeighborhood']),
+      filterAll() {
+            this.setSelectedCategory(null)
+            this.setSelectedNeighborhood(null)
+            if(this.$router.history.current.path !== '/'){
+                this.$router.push('/')
+            }
+        },
     },
     mounted() {
       if(this.categoriesList.length === 0) {
@@ -144,6 +158,7 @@
         if(this.userIsAuthenticated){
           menuAdmin = [
             { title: "Categories", url: '/admin/categories'},
+            { title: "Posts", url: '/posts/edit'},
             { title: "Add Post", url: '/posts/add'},
           ]
         }

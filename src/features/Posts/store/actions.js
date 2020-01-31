@@ -8,7 +8,12 @@ const getPosts = async ({commit}) => {
             return
         } 
         snapshot.forEach(doc => {
-            commit('ADDPOSTTOLIST', doc.data())
+            let post = doc.data()
+            post.uid = doc.id
+            commit('ADDPOSTTOLIST', post)
+            if(doc.data().neighborhood){
+                commit('ADDTONEIGHBORHOODLIST', doc.data().neighborhood)
+            }
         })
     }).catch(err => {
         commit('SETERRORMESSAGE', err)
@@ -35,12 +40,62 @@ const createPost = async ({commit}, payload) => {
     
 }
 
+const editPost = async ({commit}, payload) => {
+    const postRef = firestore().collection('posts').doc(payload.uid)
+    // const oldSlug = payload.oldSlug
+    // delete payload.oldSlug
+    // commit('REMOVEPOSTFROMLIST', oldSlug)
+    await postRef.update({
+        uid: payload.uid,
+        title: payload.title,
+        description: payload.description,
+        address: payload.address,
+        neighborhood: payload.neighborhood,
+        flex: payload.flex,
+        lat: payload.lat,
+        lng: payload.lng,
+        owner: payload.owner,
+        author: payload.author,
+        category: payload.category,
+        language: payload.language,
+        slug: payload.slug,
+    })
+    .then(() => {
+        commit('REPLACEPOSTFROMLIST', payload)
+    })
+    .catch(function(err) {
+        alert(err)
+    })
+}
+
+const deletePost = async ({commit, state}) => {
+    const postRef = firestore().collection('posts')
+                            .doc( state.selectedPost.uid)
+    commit('REMOVEPOSTFROMLIST', state.selectedPost.slug)
+    await postRef.delete()
+    .then(() => {
+        commit('SETSELECTEDPOST', null)
+    })    
+    .catch(function(err) {
+        commit('ADDPOSTTOLIST', state.selectedPost )
+        alert(err)
+    })
+}
+
 const setSelectedPost = ({commit}, payload) => {
     commit('SETSELECTEDPOST', payload)
+}
+
+const setSelectedNeighborhood = ({commit}, payload) => {
+    commit('SETSELECTEDNEIGHBORHOOD', payload)
 }
 
 export default {
     getPosts,
     createPost,
     setSelectedPost,
+    setSelectedNeighborhood,
+    editPost,
+    deletePost,
+
 }

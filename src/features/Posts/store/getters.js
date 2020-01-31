@@ -1,8 +1,13 @@
 const filteredPosts = (state, getters,rootState) => {
-    let filtered = state.postsList
-    if(rootState.Categories.selectedCategory){
+    let filtered = []
+    if(state.selectedNeighborhood){
+        filtered = state.postsList.filter(post => post.neighborhood === state.selectedNeighborhood)
+    }
+    else if(rootState.Categories.selectedCategory){
         filtered = state.postsList.filter(post => post.category === rootState.Categories.selectedCategory.uid)
-    } 
+    } else {
+        filtered = state.postsList
+    }
 
     return filtered
 }

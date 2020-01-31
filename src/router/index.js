@@ -5,6 +5,7 @@ import Login from '@/features/Accounts/Login'
 import Logout from '@/features/Accounts/Logout'
 import PostsList from '@/features/Posts/PostsList'
 import PostAdd from '@/features/Posts/PostAdd'
+import PostEdit from '@/features/Posts/PostEdit'
 import PostDetail from '@/features/Posts/PostDetail'
 import CategoryAdd from '@/features/Categories/CategoryAdd'
 import CategoriesList from '@/features/Categories/CategoriesList'
@@ -42,6 +43,11 @@ const routes = [
     path: '/posts/add',
     name: 'posts-add',
     component: PostAdd
+  },
+  {
+    path: '/posts/edit',
+    name: 'posts-edit',
+    component: PostEdit
   },
   {
     path: '/posts/:slug',

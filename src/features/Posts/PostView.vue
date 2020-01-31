@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-card>
-            <v-img
+            <v-img 
             :src="imageUrl"
             class="white--text align-end"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
@@ -86,6 +86,14 @@ export default {
     },
     computed: {
         ...mapState('Posts', ['selectedPost'])
+    },
+    watch: {
+        post(value) {
+            if(value) {
+                this.imageUrl = ""
+                this.getUrl()
+            }
+        }
     }
 }
 </script>

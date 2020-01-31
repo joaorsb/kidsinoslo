@@ -26,5 +26,7 @@ export default {
     columnsFlex: [
         12, 6
     ],
-    currentUid: null
+    currentUid: null,
+    neighborhoodList: [],
+    selectedNeighborhood: null
 }
