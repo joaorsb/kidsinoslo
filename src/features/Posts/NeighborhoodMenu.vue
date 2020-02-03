@@ -23,12 +23,20 @@ export default {
         ...mapState('Posts', ['neighborhoodList', 'selectedNeighborhood']),
     },
     methods: {
-        ...mapActions('Posts', ['setSelectedNeighborhood']),
+        ...mapActions('Posts', [
+            'setSelectedNeighborhood', 
+            'getPaginatedPosts', 
+            'clearPaginatedPosts',
+            'setPaginationPage'
+            ]),
         ...mapActions('Categories', ['setSelectedCategory']),
         filterNeighborhood(index) {
+            this.setPaginationPage(1)
+            this.clearPaginatedPosts()
             this.setSelectedCategory(null)
             const neighborhood = this.neighborhoodList[index]
             this.setSelectedNeighborhood(neighborhood)
+            this.getPaginatedPosts()
             if(this.$router.history.current.path !== '/'){
                 this.$router.push('/')
             }

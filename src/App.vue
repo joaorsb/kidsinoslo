@@ -52,7 +52,10 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-          <v-list v-if="this.loggedUser && this.loggedUser.role.includes('user')">
+          <v-divider></v-divider>
+          <categories-menu></categories-menu>
+          <neighborhood-menu></neighborhood-menu>
+          <v-list v-if="this.loggedUser && this.loggedUser.role.includes('admin')">
                   <v-list-item-content>
                       <v-list-item-title>Admin area</v-list-item-title>
                   </v-list-item-content>
@@ -118,10 +121,19 @@
     methods: {
       ...mapActions('Accounts', ['clearAuthError', 'setToken']),
       ...mapActions('Categories', ['getCategories', 'setSelectedCategory']),
-      ...mapActions('Posts', ['getPosts', 'setSelectedNeighborhood']),
+      ...mapActions('Posts', [
+        'getPosts', 
+        'setSelectedNeighborhood', 
+        'getPaginatedPosts',
+        'setPaginationPage',
+        'clearPaginatedPosts',
+      ]),
       filterAll() {
+            this.setPaginationPage(1)
+            this.clearPaginatedPosts()
             this.setSelectedCategory(null)
             this.setSelectedNeighborhood(null)
+            this.getPaginatedPosts()
             if(this.$router.history.current.path !== '/'){
                 this.$router.push('/')
             }
@@ -131,14 +143,14 @@
       if(this.categoriesList.length === 0) {
         this.getCategories()
       }
-      if(this.postsList.length === 0) {
-        this.getPosts()
+      if(this.paginatedPosts.length === 0) {
+        this.getPaginatedPosts()
       }
     }, 
     computed: {
       ...mapGetters('Accounts', ['loggedUser', 'authError', 'isAdmin']),
       ...mapState('Categories', ['categoriesList']),
-      ...mapState('Posts', ['postsList']),
+      ...mapState('Posts', ['postsList', 'paginatedPosts']),
       menuItems() {
         let menuItems = [
           // { icon: "mdi-account", title: "Register", url: '/register'},

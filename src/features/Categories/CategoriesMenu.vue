@@ -37,19 +37,30 @@ export default {
     },
     methods: {
         ...mapActions('Categories', ['setSelectedCategory']),
-        ...mapActions('Posts', ['setSelectedNeighborhood']),
+        ...mapActions('Posts', [
+            'setSelectedNeighborhood', 
+            'getPaginatedPosts', 
+            'clearPaginatedPosts',
+            'setPaginationPage'
+            ]),
         filterPaid(index) {
+            this.setPaginationPage(1)
+            this.clearPaginatedPosts()
             this.setSelectedNeighborhood(null)
             const category = this.paidCategories[index]
             this.setSelectedCategory(category)
+            this.getPaginatedPosts()
             if(this.$router.history.current.path !== '/'){
                 this.$router.push('/')
             }
         },
         filterFree(index) {
+            this.setPaginationPage(1)
+            this.clearPaginatedPosts()
             this.setSelectedNeighborhood(null)
             const category = this.freeCategories[index]
             this.setSelectedCategory(category)
+            this.getPaginatedPosts()
             if(this.$router.history.current.path !== '/'){
                 this.$router.push('/')
             }

@@ -28,5 +28,8 @@ export default {
     ],
     currentUid: null,
     neighborhoodList: [],
-    selectedNeighborhood: null
+    selectedNeighborhood: null,
+    paginatedPosts: [],
+    page: 1,
+    paginationSize: 10
 }

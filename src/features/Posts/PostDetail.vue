@@ -44,7 +44,7 @@ export default {
     methods: {
         ...mapActions('Posts',['setSelectedPost']),
         getUrl() {
-            const fileRef = storage().ref().child('posts/' + this.selectedPost.slug + "/" + this.selectedPost.imageName)
+            const fileRef = storage().ref().child('posts/' + this.selectedPost.uid + "/" + this.selectedPost.imageName)
             fileRef.getDownloadURL().then(url => {
                 this.imageUrl = url
             })

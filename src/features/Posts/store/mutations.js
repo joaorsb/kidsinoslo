@@ -10,6 +10,18 @@ const ADDPOSTTOLIST = (state, payload) => {
     state.postsList.unshift(payload)
 }
 
+const ADDPOSTTOPAGINATEDPOSTS = (state, payload) => {
+    state.paginatedPosts.push(payload)
+}
+
+const CLEARPAGINATEDPOSTS = (state) => {
+    state.paginatedPosts = []
+}
+
+const ADDMOREPOSTTOPAGINATEDPOSTS = (state, payload) => {
+    state.paginatedPosts.push(payload)
+}
+
 const REPLACEPOSTFROMLIST = (state, payload) => {
     state.postsList.forEach(function(post, i) 
         { if (post.uid == payload.uid) {
@@ -40,6 +52,10 @@ const REMOVEPOSTFROMLIST = (state, payload) => {
     state.postsList = state.postsList.filter(post => post.slug !== payload)
 }
 
+const SETPAGINATIONPAGE = (state, payload) => {
+    state.page = payload
+}
+
 export default {
     SETSELECTEDPOST,
     SETPOSTSLIST,
@@ -49,5 +65,9 @@ export default {
     ADDTONEIGHBORHOODLIST,
     SETSELECTEDNEIGHBORHOOD,
     REMOVEPOSTFROMLIST,
-    REPLACEPOSTFROMLIST
+    REPLACEPOSTFROMLIST,
+    SETPAGINATIONPAGE,
+    ADDPOSTTOPAGINATEDPOSTS,
+    ADDMOREPOSTTOPAGINATEDPOSTS,
+    CLEARPAGINATEDPOSTS
 }

@@ -20,6 +20,62 @@ const getPosts = async ({commit}) => {
     })
 }
 
+const getPaginatedPosts = async ({commit, state, rootState}) => {
+    let postsRef = null
+    if(state.selectedNeighborhood){
+        postsRef = firestore().collection('posts').where('neighborhood', '==', state.selectedNeighborhood)
+    } else if(rootState.Categories.selectedCategory){
+        postsRef = firestore().collection('posts').where('category', '==', rootState.Categories.selectedCategory.uid)
+    } else {
+        postsRef = firestore().collection('posts')
+    }
+
+    if(state.page < 2){
+        await postsRef.orderBy('createdAt', "desc").limit(state.paginationSize).get().then(snapshot => {
+            if(snapshot.empty){
+                return
+            } 
+            snapshot.forEach(doc => {
+                let post = doc.data()
+                post.uid = doc.id
+                commit('ADDPOSTTOPAGINATEDPOSTS', post)
+                if(doc.data().neighborhood){
+                    commit('ADDTONEIGHBORHOODLIST', doc.data().neighborhood)
+                }
+                
+            })
+            let nextPage = state.page + 1
+            commit('SETPAGINATIONPAGE', nextPage)
+
+        }).catch(err => {
+            commit('SETERRORMESSAGE', err)
+        })
+    } else {
+        let lastVisible = state.paginatedPosts[state.paginatedPosts.length - 1]
+        await postsRef.orderBy('createdAt', "desc").limit(state.paginationSize)
+        .startAfter(lastVisible.createdAt)
+        .get().then(snapshot => {
+            if(snapshot.empty){
+                return
+            } 
+            snapshot.forEach(doc => {
+                let post = doc.data()
+                post.uid = doc.id
+                commit('ADDMOREPOSTTOPAGINATEDPOSTS', post)
+                if(doc.data().neighborhood){
+                    commit('ADDTONEIGHBORHOODLIST', doc.data().neighborhood)
+                }
+
+            })
+            let nextPage = state.page + 1
+            commit('SETPAGINATIONPAGE', nextPage)
+        }).catch(err => {
+            commit('SETERRORMESSAGE', err)
+        })
+    }
+
+}
+
 const createPost = async ({commit}, payload) => {
     let image = null
     if(payload.image) {
@@ -90,6 +146,14 @@ const setSelectedNeighborhood = ({commit}, payload) => {
     commit('SETSELECTEDNEIGHBORHOOD', payload)
 }
 
+const clearPaginatedPosts = ({commit}) => {
+    commit('CLEARPAGINATEDPOSTS')
+}
+
+const setPaginationPage = ({commit}, payload) => {
+    commit('SETPAGINATIONPAGE', payload)
+}
+
 export default {
     getPosts,
     createPost,
@@ -97,5 +161,8 @@ export default {
     setSelectedNeighborhood,
     editPost,
     deletePost,
+    getPaginatedPosts,
+    clearPaginatedPosts,
+    setPaginationPage,
 
 }

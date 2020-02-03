@@ -59,11 +59,6 @@
           return this.user.password.length > 7 && this.user.email !== undefined
       }
     },
-    watch: {
-      isLoading(value) {
-        return value
-      }
-    },
 }
 </script>
 
