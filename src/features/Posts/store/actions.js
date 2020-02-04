@@ -20,6 +20,10 @@ const getPosts = async ({commit}) => {
     })
 }
 
+const clearPostsList = ({commit}) => {
+    commit('SETPOSTSLIST', [])
+} 
+
 const searchPosts = async ({commit}, payload) => {
     const postsRef = firestore().collection('posts')
     await postsRef.where('title', '>=', payload).get().then(snapshot => {
@@ -120,9 +124,6 @@ const createPost = async ({commit}, payload) => {
 
 const editPost = async ({commit}, payload) => {
     const postRef = firestore().collection('posts').doc(payload.uid)
-    // const oldSlug = payload.oldSlug
-    // delete payload.oldSlug
-    // commit('REMOVEPOSTFROMLIST', oldSlug)
     await postRef.update({
         uid: payload.uid,
         title: payload.title,
@@ -187,4 +188,5 @@ export default {
     clearPaginatedPosts,
     setPaginationPage,
     searchPosts,
+    clearPostsList
 }

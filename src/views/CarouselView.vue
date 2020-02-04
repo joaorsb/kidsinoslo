@@ -19,7 +19,7 @@
                 align="center"
                 justify="center"
                 >
-                    <div class="display-3" >
+                    <div class="display-2 font-weight-thin" >
                         <span class="info-title" v-text="post.title"></span>
                     </div>
                 </v-row>

@@ -17,93 +17,124 @@
             <v-list-item
                 v-for="(post, index) in postsList"
                 :key="index"
-                @click="selectPost(index)"
             >
-                <v-list-item-title>{{ post.title }}</v-list-item-title>
+                <template>
+                    <v-list-item-title @click="selectPost(index)">
+                        {{ post.title }}
+                    </v-list-item-title>
+                    <v-list-item-icon>
+                        <v-btn text icon 
+                            color="error" 
+                            @click="deletePost()" 
+                            align="end" >
+                            <v-icon>mdi-delete</v-icon>
+
+                        </v-btn>
+                    </v-list-item-icon>
+                </template>
             </v-list-item>
         </v-list>
         <div v-if="selectedPost">
-            <v-divider></v-divider>
-            <div class="my-3">
-                <h3 class="d-inline">Selected: {{selectedPost.title }}</h3> 
-                <v-form
-                    ref="form" class="d-inline"
-                    lazy-validation
-                    >
-                    <v-btn text icon 
-                        color="error" 
-                        @click="deletePost()" 
-                        class="float-right" >
-                        <v-icon>mdi-delete</v-icon>
-                    </v-btn>
-                </v-form>
-            </div>
-            <v-form
-                ref="form"
-                lazy-validation
-                enctype="multipart/form-data"
-            >
-                <v-text-field
-                v-model="selectedPost.title"
-                label="Title"
-                required
-                ></v-text-field>
+            <v-row justify="center">
+                <v-dialog v-model="dialog" fullscreen hide-overlay>
+                    <v-card>
+                        <v-card-title>
+                            <div class="my-3">
+                                <v-btn icon @click="dialog = false">
+                                    <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                                <h3 class="d-inline">Selected: {{selectedPost.title }}</h3> 
+                                <v-btn text icon 
+                                    color="error" 
+                                    @click="deletePost()" 
+                                    align="end" >
+                                    <v-icon>mdi-delete</v-icon>
+                                </v-btn>
 
-                <v-text-field
-                v-model="selectedPost.flex"
-                label="Image Columns"
-                required
-                ></v-text-field>
-
-                <v-text-field
-                v-model="selectedPost.address"
-                label="Address"
-                required
-                ></v-text-field>
-
-                <v-text-field
-                v-model="selectedPost.neighborhood"
-                label="Neighborhood"
-                required
-                ></v-text-field>
-                
-                <v-select
-                    :items="categoriesList"
-                    item-text="name"
-                    item-value="uid"
-                    v-model="selectedPost.category"
-                    label="Choose Category"
-                    outlined
-                    ></v-select>
-                
-                <v-select
-                    :items="languages"
-                    item-text="name"
-                    item-value="value"
-                    v-model="selectedPost.language"
-                    label="Choose Language"
-                    outlined
-                ></v-select>
-                
-                <v-row>
-                    <v-col cols="3">
-                        <label for="body"
-                        class="">
-                            Description:
-                        </label>
-                    </v-col>
-                    <v-col cols="12">
-                        <ckeditor id="description"
-                            class=""
-                            name="description"
-                            type="classic"
-                            tag="textarea"
-                            v-model="selectedPost.description">
-                        </ckeditor>
-                    </v-col>
-                </v-row>
-                <v-btn class="mr-4 float-right" color="primary" @click="submit">Update</v-btn>
-            </v-form>
+                            </div>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col cols="12">
+                                        <v-text-field
+                                            v-model="selectedPost.title"
+                                            label="Title"
+                                            required
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field
+                                            v-model="selectedPost.flex"
+                                            label="Image Columns"
+                                            required
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                        <v-text-field
+                                            v-model="selectedPost.address"
+                                            label="Address"
+                                            required
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                         <v-text-field
+                                            v-model="selectedPost.neighborhood"
+                                            label="Neighborhood"
+                                            required
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="6">
+                                        <v-select
+                                            :items="categoriesList"
+                                            item-text="name"
+                                            item-value="uid"
+                                            v-model="selectedPost.category"
+                                            label="Choose Category"
+                                            outlined
+                                        ></v-select>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="6">
+                                        <v-select
+                                            :items="languages"
+                                            item-text="name"
+                                            item-value="value"
+                                            v-model="selectedPost.language"
+                                            label="Choose Language"
+                                            outlined
+                                        ></v-select>
+                                    </v-col>
+                                    <v-col cols="12">
+                                        <v-row>
+                                            <v-col cols="3">
+                                                <label for="body"
+                                                class="">
+                                                    Description:
+                                                </label>
+                                            </v-col>
+                                            <v-col cols="12">
+                                                <ckeditor id="description"
+                                                    class=""
+                                                    name="description"
+                                                    type="classic"
+                                                    tag="textarea"
+                                                    v-model="selectedPost.description">
+                                                </ckeditor>
+                                            </v-col>
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn text color="danger" @click="dialog = false">Cancel</v-btn>
+                            <v-btn text color="primary" @click="submit">Update</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-row>
+            
         </div>
     </div>
 </template>
@@ -116,6 +147,7 @@ export default {
         return {
             oldSlug: "",
             postTitle: "",
+            dialog: false
         }
     },
     computed: {
@@ -123,11 +155,18 @@ export default {
         ...mapState('Categories', ['categoriesList']),
     },
     methods: {
-        ...mapActions('Posts', ['setSelectedPost', 'editPost', 'deletePost', 'searchPosts']),
+        ...mapActions('Posts', [
+            'setSelectedPost', 
+            'editPost', 
+            'deletePost', 
+            'searchPosts',
+            'clearPostsList',
+        ]),
         selectPost(index) {
             const post = this.postsList[index]
             this.oldSlug = post.slug
             this.setSelectedPost(post)
+            this.dialog = ! this.dialog
         },
         addPost(){
             this.$router.push({name: "posts-add"})
@@ -138,6 +177,7 @@ export default {
             this.selectedPost.oldSlug = this.oldSlug
             this.editPost(this.selectedPost)
             this.setSelectedPost(null)
+            this.dialog = !this.dialog
         }
     },
     watch: {
@@ -146,6 +186,9 @@ export default {
                 this.searchPosts(value)
             }
         }
-    }  
+    },
+    beforeDestroy() {
+        this.clearPostsList()
+    }
 }
 </script>

@@ -5,7 +5,7 @@
           class="hidden-sm-and-up">
         </v-app-bar-nav-icon>
         <v-toolbar-title class="headline text-uppercase">
-          <span> Kids in Oslo </span>
+          <span  class="font-weight-medium"> Kids in Oslo </span>
           <span class="font-weight-light"></span>
         </v-toolbar-title>
         <div class="flex-grow-1"></div>
