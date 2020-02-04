@@ -1,22 +1,30 @@
 <template>
-    <div>
-          <v-carousel
-                cycle
-                height="400"
-                hide-delimiter-background
-                show-arrows-on-hover
+    <div v-if="posts.length > 0">
+        <v-carousel
+            cycle
+            height="400"
+            hide-delimiter-background
+            show-arrows-on-hover
+        >
+            <v-carousel-item
+            v-for="(post, i) in posts"
+            :key="i"
+            :src="post.imageUrl"
+            reverse-transition="fade-transition"
+            transition="fade-transition"
+            @click="selectPost(i)"
             >
-                <v-carousel-item
-                v-for="(post, i) in posts"
-                :key="i"
-                :src="post.imageUrl"
-                reverse-transition="fade-transition"
-                transition="fade-transition"
-                @click="selectPost(i)"
+                <v-row
+                class="fill-height"
+                align="center"
+                justify="center"
                 >
-                
-                </v-carousel-item>
-            </v-carousel>
+                    <div class="display-3" >
+                        <span class="info-title" v-text="post.title"></span>
+                    </div>
+                </v-row>
+            </v-carousel-item>
+        </v-carousel>
     </div>
 </template>
 <script>
@@ -52,7 +60,6 @@ export default {
             const fileRef =  storage().ref().child('posts/' + randPost.uid + "/" + randPost.imageName)
             fileRef.getDownloadURL().then(url => {
                 randPost.imageUrl = url
-                console.log(randPost)
                 this.posts.push(randPost)
             })
             .catch(error => {
@@ -75,14 +82,15 @@ export default {
         }
     },
     computed: {
-        ...mapState('Posts', ['paginatedPosts', 'selectedPost'])
+        ...mapState('Posts', ['paginatedPosts', 'selectedPost', 'selectedNeighborhood']),
+        ...mapState('Categories', ['selectedCategory'])
     },
     watch: {
         paginatedPosts: {
             immediate: true,
             deep: true,
             handler: function(value) {
-                if(value.length > 6) {
+                if(value.length > 6 && this.posts.length === 0) {
                     this.getRandom()
                 }
             }
@@ -90,3 +98,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+    .info-title {
+        color: white
+    }
+</style>
