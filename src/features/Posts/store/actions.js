@@ -122,6 +122,31 @@ const createPost = async ({commit}, payload) => {
     
 }
 
+const updatePostImage = async ({commit, state}, payload) => {
+    if(payload) {
+        var storageRef = storage().ref().child('posts/' + state.selectedPost.uid + "/" + payload.name)
+        storageRef.put(payload).then(() => {
+            const postRef = firestore().collection('posts').doc(state.selectedPost.uid)
+            postRef.update({
+                imageName: payload.name
+            })
+            .then(() => {
+                commit('REPLACEPOSTFROMLIST', state.selectedPost)
+            })
+            .catch(function(err) {
+                alert(err)
+            })
+        }).catch(error => {
+            alert(error)
+        })
+    }
+}
+
+const deletePostImage = async ({state}) => {
+    var storageRef = storage().ref().child('posts/' + state.selectedPost.uid + "/" + state.selectedPost.name)
+    storageRef.delete() 
+}
+
 const editPost = async ({commit}, payload) => {
     const postRef = firestore().collection('posts').doc(payload.uid)
     await postRef.update({
@@ -188,5 +213,8 @@ export default {
     clearPaginatedPosts,
     setPaginationPage,
     searchPosts,
-    clearPostsList
+    clearPostsList,
+    updatePostImage,
+    deletePostImage,
+
 }

@@ -22,25 +22,31 @@
                     <v-list-item-title @click="selectPost(index)">
                         {{ post.title }}
                     </v-list-item-title>
-                    <v-list-item-icon>
-                        <v-btn text icon 
-                            color="error" 
-                            @click="deletePost()" 
-                            align="end" >
-                            <v-icon>mdi-delete</v-icon>
+                       
+                    <v-btn  text
+                        color="teal" 
+                        @click="openImageDialog(index)" 
+                    >
+                        Change image
+                    </v-btn> 
+                    <v-btn text  
+                        color="error" 
+                        @click="deletePost()" 
+                        align="end" >
+                        Delete post
+                        <v-icon>mdi-delete</v-icon>
 
-                        </v-btn>
-                    </v-list-item-icon>
+                    </v-btn>
                 </template>
             </v-list-item>
         </v-list>
         <div v-if="selectedPost">
             <v-row justify="center">
-                <v-dialog v-model="dialog" fullscreen hide-overlay>
+                <v-dialog v-model="dialogEdit" fullscreen hide-overlay>
                     <v-card>
                         <v-card-title>
                             <div class="my-3">
-                                <v-btn icon @click="dialog = false">
+                                <v-btn icon @click="dialogEdit = false">
                                     <v-icon>mdi-close</v-icon>
                                 </v-btn>
                                 <h3 class="d-inline">Selected: {{selectedPost.title }}</h3> 
@@ -128,8 +134,38 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn text color="danger" @click="dialog = false">Cancel</v-btn>
+                            <v-btn text color="error" @click="dialogEdit = false">Cancel</v-btn>
                             <v-btn text color="primary" @click="submit">Update</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+                <v-dialog v-model="dialogImage" max-width="800">
+                    <v-card>
+                        <v-img
+                        :src="imageUrl"
+                        height="400"
+                        >
+                        </v-img>
+                        <v-card-title v-text="this.selectedPost.title"></v-card-title>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-form
+                                        ref="form"
+                                        lazy-validation
+                                        enctype="multipart/form-data"
+                                    >
+                                        <v-file-input outlined show-size accept="image/*" 
+                                            label="Photo" v-model="photo">
+                                        </v-file-input>
+                                    </v-form>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn text color="error" @click="dialogImage = false">Cancel</v-btn>
+                            <v-btn text color="primary" @click="updateImage">Update</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -139,6 +175,7 @@
     </div>
 </template>
 <script>
+import { storage } from 'firebase'
 import { mapState, mapActions } from 'vuex'
 import { slugfy } from '../../helpers/slugfy'
 export default {
@@ -147,7 +184,10 @@ export default {
         return {
             oldSlug: "",
             postTitle: "",
-            dialog: false
+            dialogEdit: false,
+            dialogImage: false,
+            imageUrl: "",
+            photo: null,
         }
     },
     computed: {
@@ -161,12 +201,14 @@ export default {
             'deletePost', 
             'searchPosts',
             'clearPostsList',
+            'updatePostImage',
+            'deletePostImage',
         ]),
         selectPost(index) {
             const post = this.postsList[index]
             this.oldSlug = post.slug
             this.setSelectedPost(post)
-            this.dialog = ! this.dialog
+            this.dialogEdit = ! this.dialogEdit
         },
         addPost(){
             this.$router.push({name: "posts-add"})
@@ -177,7 +219,38 @@ export default {
             this.selectedPost.oldSlug = this.oldSlug
             this.editPost(this.selectedPost)
             this.setSelectedPost(null)
-            this.dialog = !this.dialog
+            this.dialogEdit = !this.dialogEdit
+        },
+        openImageDialog(index){
+            const post = this.postsList[index]
+            this.setSelectedPost(post)
+            const fileRef = storage().ref().child('posts/' + this.selectedPost.uid + "/" + this.selectedPost.imageName)
+            fileRef.getDownloadURL().then(url => {
+                this.imageUrl = url
+            })
+            .catch(error => {
+                switch (error.code) {
+                    case 'storage/object-not-found':
+                    break;
+
+                    case 'storage/unauthorized':
+                    break;
+
+                    case 'storage/canceled':
+                    break;
+
+                    case 'storage/unknown':
+                    break;
+                }
+            })
+            this.dialogImage = true
+        },
+        updateImage(event){
+            event.preventDefault()
+            if(this.photo){
+                this.updatePostImage(this.photo)
+            }
+            this.dialogImage = false
         }
     },
     watch: {
