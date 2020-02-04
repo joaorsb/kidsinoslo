@@ -20,6 +20,28 @@ const getPosts = async ({commit}) => {
     })
 }
 
+const searchPosts = async ({commit}, payload) => {
+    const postsRef = firestore().collection('posts')
+    await postsRef.where('title', '>=', payload).get().then(snapshot => {
+        if(snapshot.empty){
+            commit('SETPOSTSLIST', [])
+            return
+        } 
+        commit('SETPOSTSLIST', [])
+
+        snapshot.forEach(doc => {
+            let post = doc.data()
+            post.uid = doc.id
+            commit('ADDPOSTTOLIST', post)
+            if(doc.data().neighborhood){
+                commit('ADDTONEIGHBORHOODLIST', doc.data().neighborhood)
+            }
+        })
+    }).catch(err => {
+        commit('SETERRORMESSAGE', err)
+    })
+}
+
 const getPaginatedPosts = async ({commit, state, rootState}) => {
     let postsRef = null
     if(state.selectedNeighborhood){
@@ -164,5 +186,5 @@ export default {
     getPaginatedPosts,
     clearPaginatedPosts,
     setPaginationPage,
-
+    searchPosts,
 }

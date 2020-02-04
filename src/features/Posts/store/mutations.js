@@ -7,7 +7,7 @@ const SETPOSTSLIST = (state, payload) => {
 }
 
 const ADDPOSTTOLIST = (state, payload) => {
-    state.postsList.unshift(payload)
+    state.postsList.push(payload)
 }
 
 const ADDPOSTTOPAGINATEDPOSTS = (state, payload) => {

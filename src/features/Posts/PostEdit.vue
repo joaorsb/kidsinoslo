@@ -1,7 +1,12 @@
 <template>
     <div>
         <div>
-            <h2 class="d-inline">Posts - click to edit</h2> 
+            <v-text-field
+                    label="Start typing to search"
+                    v-model="postTitle"
+                    filled
+            ></v-text-field>
+            <h2 class="d-inline" v-show="postsList.length > 0">Posts - click to edit</h2> 
             <v-btn small color="primary" class="float-right" @click="addPost()">
                 Add new Post
             </v-btn>
@@ -109,7 +114,8 @@ export default {
     name: "PostEdit",
     data() {
         return {
-            oldSlug: ""
+            oldSlug: "",
+            postTitle: "",
         }
     },
     computed: {
@@ -117,7 +123,7 @@ export default {
         ...mapState('Categories', ['categoriesList']),
     },
     methods: {
-        ...mapActions('Posts', ['setSelectedPost', 'editPost', 'deletePost']),
+        ...mapActions('Posts', ['setSelectedPost', 'editPost', 'deletePost', 'searchPosts']),
         selectPost(index) {
             const post = this.postsList[index]
             this.oldSlug = post.slug
@@ -133,6 +139,13 @@ export default {
             this.editPost(this.selectedPost)
             this.setSelectedPost(null)
         }
-    },  
+    },
+    watch: {
+        postTitle(value){
+            if(value.length > 3) {
+                this.searchPosts(value)
+            }
+        }
+    }  
 }
 </script>

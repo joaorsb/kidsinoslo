@@ -11,7 +11,7 @@
                   <v-col
                   v-for="(post, index) in this.paginatedPosts"
                   :key="index"
-                  :cols="post.flex"
+                  cols="6"
                   >
                     <post-view :post='post'></post-view>
                   </v-col>

@@ -22,7 +22,6 @@
     </v-app-bar>
 
     <v-content >
-
       <v-navigation-drawer
           v-model="navBarMenu"
           absolute
@@ -53,6 +52,11 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
+          <v-list>
+            <v-list-item @click="filterAll()">
+                <v-list-item-title>Alle aktiviteter</v-list-item-title>
+            </v-list-item>
+          </v-list>
           <categories-menu></categories-menu>
           <neighborhood-menu></neighborhood-menu>
           <v-list v-if="this.loggedUser && this.loggedUser.role.includes('admin')">
@@ -71,7 +75,10 @@
               </v-list>
       </v-navigation-drawer>
       <v-container >
+        <carousel-view v-if="this.paginatedPosts.length > 0 && this.$router.history.current.path === '/'"></carousel-view>
+
           <v-row class="d-flex">
+            
             <v-col  class="hidden-xs-only " md="3" >
               <v-list>
                   <v-list-item @click="filterAll()">
