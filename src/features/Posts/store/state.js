@@ -31,5 +31,5 @@ export default {
     selectedNeighborhood: null,
     paginatedPosts: [],
     page: 1,
-    paginationSize: 10
+    paginationSize: 25
 }

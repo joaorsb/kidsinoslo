@@ -49,15 +49,18 @@ const searchPosts = async ({commit}, payload) => {
 const getPaginatedPosts = async ({commit, state, rootState}) => {
     let postsRef = null
     if(state.selectedNeighborhood){
-        postsRef = firestore().collection('posts').where('neighborhood', '==', state.selectedNeighborhood)
+        postsRef = firestore().collection('posts')
+        .where('neighborhood', '==', state.selectedNeighborhood)
     } else if(rootState.Categories.selectedCategory){
-        postsRef = firestore().collection('posts').where('category', '==', rootState.Categories.selectedCategory.uid)
+        postsRef = firestore().collection('posts')
+        .where('category', '==', rootState.Categories.selectedCategory.uid)
     } else {
         postsRef = firestore().collection('posts')
     }
 
     if(state.page < 2){
-        await postsRef.orderBy('createdAt', "desc").limit(state.paginationSize).get().then(snapshot => {
+        await postsRef.orderBy('createdAt', "desc")
+        .limit(state.paginationSize).get().then(snapshot => {
             if(snapshot.empty){
                 return
             } 

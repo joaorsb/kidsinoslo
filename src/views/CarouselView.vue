@@ -3,7 +3,6 @@
         <v-carousel
             cycle
             height="400"
-            hide-delimiter-background
             show-arrows-on-hover
         >
             <v-carousel-item
@@ -45,16 +44,14 @@ export default {
         },
         getRandom() {
             let numbers = []
-            for(let i = 0; i < 3; i++){
-                const number = [Math.round((Math.random() * 10) + 1)]
+            for(let i = 0; i < 5; i++){
+                const number = Math.round((Math.random() * 10) + 1)
                 if( ! numbers.includes(number) && this.paginatedPosts.length > number) {
                     numbers.push(number)
                     let randomPost = this.paginatedPosts[number]
                     this.getUrl(randomPost)
                 }
             }
-
-
         },
         getUrl(randPost) {
             const fileRef =  storage().ref().child('posts/' + randPost.uid + "/" + randPost.imageName)
@@ -90,7 +87,7 @@ export default {
             immediate: true,
             deep: true,
             handler: function(value) {
-                if(value.length > 6 && this.posts.length === 0) {
+                if(value.length > 10 && this.posts.length === 0) {
                     this.getRandom()
                 }
             }

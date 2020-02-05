@@ -22,6 +22,7 @@
                     color="primary"
                     @click="loadMorePosts()"
                     class="my-4 float-right"
+                    v-show="this.paginatedPosts.length > 25"
                   >
                     Load more
                     <v-icon>mdi-autorenew</v-icon>

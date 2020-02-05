@@ -68,10 +68,13 @@
           </v-list>
       </v-navigation-drawer>
       <v-container >
-        <carousel-view v-if="this.paginatedPosts.length > 0 && this.$router.history.current.path === '/'"></carousel-view>
 
           <v-row class="d-flex">
-            
+            <v-col cols="12">
+              <carousel-view 
+                v-if="this.paginatedPosts.length > 0 && this.$router.history.current.path === '/'">
+              </carousel-view>
+            </v-col>
             <v-col  class="hidden-sm-and-down" md="3" >
               <v-list>
                   <v-list-item @click="filterAll()">
