@@ -190,7 +190,7 @@
 <script>
 import { storage } from 'firebase'
 import { mapState, mapActions } from 'vuex'
-import { slugfy } from '../../helpers/slugfy'
+import { slugfy } from '@/helpers/slugfy'
 export default {
     name: "PostEdit",
     data() {

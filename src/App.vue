@@ -9,6 +9,15 @@
           <span class="font-weight-light"></span>
         </v-toolbar-title>
         <div class="flex-grow-1"></div>
+        <v-toolbar-items class="hidden-sm-and-down" >
+          <v-btn v-for="(language, index) in filteredLanguages" v-bind:key="index"
+            text
+            small
+            active-class="v-btn--active"
+            @click="setSelectedLanguague(language.value)">
+            <span class="mr-2">{{language.name}}</span>
+          </v-btn>
+        </v-toolbar-items>
         <v-toolbar-items class="hidden-sm-and-down">
           <v-btn v-for="item in menuItems" v-bind:key="item.title"
             text
@@ -28,8 +37,17 @@
           temporary
         >
           <v-divider></v-divider>
+          
           <v-list dense>
-
+            <v-list-item
+              link
+              v-for="(language, index) in filteredLanguages" v-bind:key="index"
+              @click="setSelectedLanguague(language.value)"
+            >
+              <v-list-item-content>
+                <v-list-item-title>{{language.name}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
             <v-list-item
               link
               v-for="item in menuItems" v-bind:key="item.title"
@@ -130,6 +148,7 @@
         'getPaginatedPosts',
         'setPaginationPage',
         'clearPaginatedPosts',
+        'setLanguage'
       ]),
       filterAll() {
             this.setPaginationPage(1)
@@ -141,6 +160,18 @@
                 this.$router.push('/')
             }
         },
+        setSelectedLanguague(value) {
+          const language = this.languages.filter(language => language.value === value)[0]
+          this.setLanguage(language.value)
+          this.setPaginationPage(1)
+          this.clearPaginatedPosts()
+          this.setSelectedCategory(null)
+          this.setSelectedNeighborhood(null)
+          this.getPaginatedPosts()
+          if(this.$router.history.current.path !== '/'){
+                this.$router.push('/')
+            }
+        }
     },
     mounted() {
       if(this.categoriesList.length === 0) {
@@ -153,7 +184,7 @@
     computed: {
       ...mapGetters('Accounts', ['loggedUser', 'authError', 'isAdmin']),
       ...mapState('Categories', ['categoriesList']),
-      ...mapState('Posts', ['postsList', 'paginatedPosts']),
+      ...mapState('Posts', ['postsList', 'paginatedPosts', 'languages', 'selectedLanguage']),
       menuItems() {
         let menuItems = [
           // { icon: "mdi-account", title: "Register", url: '/register'},
@@ -181,6 +212,9 @@
       },
       userIsAuthenticated() {
         return this.loggedUser.id !== undefined
+      },
+      filteredLanguages() {
+        return this.languages.filter(language => language.value !== this.selectedLanguage)
       }
     },
     watch: {

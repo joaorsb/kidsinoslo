@@ -1,7 +1,7 @@
 <template>
     <div class="mx-auto">
         <v-skeleton-loader
-            :loading="this.paginatedPosts.length === 0"
+            :loading="loadingPosts"
             :transition="transition"
             height="94"
             type="list-item-two-line"
@@ -53,7 +53,7 @@
         }
     },
     computed: {
-      ...mapState('Posts', ['postsList', 'paginatedPosts']),
+      ...mapState('Posts', ['postsList', 'paginatedPosts', 'loadingPosts']),
       ...mapGetters('Posts', ['filteredPosts']),
       ...mapState('Categories', ['selectedCategory']),
     },

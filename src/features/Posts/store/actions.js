@@ -1,8 +1,9 @@
 import { firestore, storage } from 'firebase'
 
-const getPosts = async ({commit}) => {
+const getPosts = async ({commit, state}) => {
+    commit('SETLOADINGPOSTS', true)
     const postsRef = firestore().collection('posts')
-    await postsRef.orderBy('createdAt').get().then(snapshot => {
+    await postsRef.where("language", "==", state.selectedLanguage).orderBy('createdAt').get().then(snapshot => {
         if(snapshot.empty){
             commit('SETPOSTSLIST', [])
             return
@@ -18,15 +19,18 @@ const getPosts = async ({commit}) => {
     }).catch(err => {
         commit('SETERRORMESSAGE', err)
     })
+    commit('SETLOADINGPOSTS', false)
 }
 
 const clearPostsList = ({commit}) => {
     commit('SETPOSTSLIST', [])
 } 
 
-const searchPosts = async ({commit}, payload) => {
+const searchPosts = async ({commit, state}, payload) => {
+    commit('SETLOADINGPOSTS', true)
     const postsRef = firestore().collection('posts')
-    await postsRef.where('title', '>=', payload).get().then(snapshot => {
+    await postsRef.where("language", "==", state.selectedLanguage)
+    .where('title', '>=', payload).get().then(snapshot => {
         if(snapshot.empty){
             commit('SETPOSTSLIST', [])
             return
@@ -44,9 +48,11 @@ const searchPosts = async ({commit}, payload) => {
     }).catch(err => {
         commit('SETERRORMESSAGE', err)
     })
+    commit('SETLOADINGPOSTS', false)
 }
 
 const getPaginatedPosts = async ({commit, state, rootState}) => {
+    commit('SETLOADINGPOSTS', true)
     let postsRef = null
     if(state.selectedNeighborhood){
         postsRef = firestore().collection('posts')
@@ -67,7 +73,9 @@ const getPaginatedPosts = async ({commit, state, rootState}) => {
             snapshot.forEach(doc => {
                 let post = doc.data()
                 post.uid = doc.id
-                commit('ADDPOSTTOPAGINATEDPOSTS', post)
+                if(post.language == state.selectedLanguage) {
+                    commit('ADDPOSTTOPAGINATEDPOSTS', post)
+                }
                 if(doc.data().neighborhood){
                     commit('ADDTONEIGHBORHOODLIST', doc.data().neighborhood)
                 }
@@ -90,7 +98,9 @@ const getPaginatedPosts = async ({commit, state, rootState}) => {
             snapshot.forEach(doc => {
                 let post = doc.data()
                 post.uid = doc.id
-                commit('ADDMOREPOSTTOPAGINATEDPOSTS', post)
+                if(post.language === state.selectedLanguage) {
+                    commit('ADDMOREPOSTTOPAGINATEDPOSTS', post)
+                }
                 if(doc.data().neighborhood){
                     commit('ADDTONEIGHBORHOODLIST', doc.data().neighborhood)
                 }
@@ -102,6 +112,7 @@ const getPaginatedPosts = async ({commit, state, rootState}) => {
             commit('SETERRORMESSAGE', err)
         })
     }
+    commit('SETLOADINGPOSTS', false)
 
 }
 
@@ -205,6 +216,10 @@ const setPaginationPage = ({commit}, payload) => {
     commit('SETPAGINATIONPAGE', payload)
 }
 
+const setLanguage = ({commit}, payload) => {
+    commit('SETLANGUAGE', payload)
+}
+
 export default {
     getPosts,
     createPost,
@@ -219,5 +234,5 @@ export default {
     clearPostsList,
     updatePostImage,
     deletePostImage,
-
+    setLanguage,
 }

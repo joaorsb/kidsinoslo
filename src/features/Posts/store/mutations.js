@@ -56,6 +56,14 @@ const SETPAGINATIONPAGE = (state, payload) => {
     state.page = payload
 }
 
+const SETLANGUAGE = (state, payload) => {
+    state.selectedLanguage = payload
+}
+
+const SETLOADINGPOSTS = (state, payload) => {
+    state.loadingPosts = payload
+}
+
 export default {
     SETSELECTEDPOST,
     SETPOSTSLIST,
@@ -69,5 +77,7 @@ export default {
     SETPAGINATIONPAGE,
     ADDPOSTTOPAGINATEDPOSTS,
     ADDMOREPOSTTOPAGINATEDPOSTS,
-    CLEARPAGINATEDPOSTS
+    CLEARPAGINATEDPOSTS,
+    SETLANGUAGE,
+    SETLOADINGPOSTS
 }

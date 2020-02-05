@@ -72,7 +72,7 @@
 </template>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { slugfy } from '../../helpers/slugfy'
+import { slugfy } from '@/helpers/slugfy'
 
 export default {
     name: "PostAdd",
@@ -90,8 +90,8 @@ export default {
             this.post.author = this.loggedUser.name
             this.post.slug = slugfy(this.post.title)
             this.post.category = this.category
-            this.post.imageName = this.photo.name
             if(this.photo){
+                this.post.imageName = this.photo.name
                 this.post.image = this.photo
             }
             // console.log(this.photo)

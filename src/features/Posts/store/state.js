@@ -31,5 +31,7 @@ export default {
     selectedNeighborhood: null,
     paginatedPosts: [],
     page: 1,
-    paginationSize: 25
+    paginationSize: 25,
+    selectedLanguage: 'no',
+    loadingPosts: false
 }
