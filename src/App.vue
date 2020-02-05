@@ -2,14 +2,14 @@
   <v-app>
     <v-app-bar app elevate-on-scroll>
         <v-app-bar-nav-icon @click.native.stop="navBarMenu = ! navBarMenu" 
-          class="hidden-sm-and-up">
+          class="hidden-md-and-up">
         </v-app-bar-nav-icon>
         <v-toolbar-title class="headline text-uppercase">
           <span  class="font-weight-medium"> Kids in Oslo </span>
           <span class="font-weight-light"></span>
         </v-toolbar-title>
         <div class="flex-grow-1"></div>
-        <v-toolbar-items class="hidden-xs-only">
+        <v-toolbar-items class="hidden-sm-and-down">
           <v-btn v-for="item in menuItems" v-bind:key="item.title"
             text
             :to=item.url
@@ -27,14 +27,7 @@
           absolute
           temporary
         >
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>Options</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
           <v-divider></v-divider>
-
           <v-list dense>
 
             <v-list-item
@@ -60,26 +53,26 @@
           <categories-menu></categories-menu>
           <neighborhood-menu></neighborhood-menu>
           <v-list v-if="this.loggedUser && this.loggedUser.role.includes('admin')">
-                  <v-list-item-content>
-                      <v-list-item-title>Admin area</v-list-item-title>
-                  </v-list-item-content>
-                 <v-list-item
-                    link
-                    v-for="item in menuAdmin" v-bind:key="item.title"
-                    :to=item.url
-                  >
-                    <v-list-item-content>
-                      <v-list-item-title>{{item.title}}</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-              </v-list>
+              <v-list-item-content>
+                  <v-list-item-title>Admin area</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item
+                link
+                v-for="item in menuAdmin" v-bind:key="item.title"
+                :to=item.url
+              >
+                <v-list-item-content>
+                  <v-list-item-title>{{item.title}}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+          </v-list>
       </v-navigation-drawer>
       <v-container >
         <carousel-view v-if="this.paginatedPosts.length > 0 && this.$router.history.current.path === '/'"></carousel-view>
 
           <v-row class="d-flex">
             
-            <v-col  class="hidden-xs-only " md="3" >
+            <v-col  class="hidden-sm-and-down" md="3" >
               <v-list>
                   <v-list-item @click="filterAll()">
                       <v-list-item-title>Alle aktiviteter</v-list-item-title>
