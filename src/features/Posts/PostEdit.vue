@@ -172,6 +172,19 @@
             </v-row>
             
         </div>
+        <v-snackbar
+            v-model="snackbar"
+            :timeout="timeout"
+            >
+            {{ snackText }}
+            <v-btn
+                color="blue"
+                text
+                @click="snackbar = false"
+            >
+                Close
+            </v-btn>
+        </v-snackbar>
     </div>
 </template>
 <script>
@@ -188,6 +201,9 @@ export default {
             dialogImage: false,
             imageUrl: "",
             photo: null,
+            snackbar: false,
+            snackText: "",
+            timeout: 3000,
         }
     },
     computed: {
@@ -220,6 +236,8 @@ export default {
             this.editPost(this.selectedPost)
             this.setSelectedPost(null)
             this.dialogEdit = !this.dialogEdit
+            this.snackbar = true
+            this.snackText = "Post edited"
         },
         openImageDialog(index){
             const post = this.postsList[index]
@@ -251,6 +269,8 @@ export default {
                 this.updatePostImage(this.photo)
             }
             this.dialogImage = false
+            this.snackbar = true
+            this.snackText = "Photo Uploaded"
         }
     },
     watch: {
