@@ -52,6 +52,8 @@ export default {
             this.getPaginatedPosts()
             if(this.$router.history.current.path !== '/'){
                 this.$router.push('/')
+            } else {
+                window.scrollTo(0,0)
             }
         },
         filterFree(index) {
@@ -63,6 +65,8 @@ export default {
             this.getPaginatedPosts()
             if(this.$router.history.current.path !== '/'){
                 this.$router.push('/')
+            } else {
+                window.scrollTo(0,0)
             }
         },
     }, 
