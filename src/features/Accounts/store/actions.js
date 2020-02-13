@@ -1,10 +1,12 @@
-import { auth, firestore } from 'firebase'
+import * as firebase from 'firebase/app'
+import 'firebase/firestore'
+import 'firebase/auth'
 
 const register = async ({commit, state}) => {
     commit('SETLOADING', true)
     commit('CLEARAUTHERROR')
 
-    await auth()
+    await firebase.auth()
     .createUserWithEmailAndPassword(state.user.email, state.user.password)
     .then(
         response => {
@@ -15,7 +17,7 @@ const register = async ({commit, state}) => {
                 role: ['user']
             }
 
-            firestore().collection('users').add(newUser)
+            firebase.firestore().collection('users').add(newUser)
             localStorage.setItem('token', response.user.refreshToken)
             commit('SETLOADING', false)
         }
@@ -33,7 +35,7 @@ const login = async ({commit, state}) => {
     commit('CLEARAUTHERROR')
 
 
-    auth().signInWithEmailAndPassword(state.user.email, state.user.password).then(
+    firebase.auth().signInWithEmailAndPassword(state.user.email, state.user.password).then(
         () => {
             commit('SETLOADING', false)
         }
@@ -61,7 +63,7 @@ const setAuthError = ({ commit }, payload) => {
 }
 
 const clearUser = ({commit}) => {
-    auth().signOut()
+    firebase.auth().signOut()
     commit('CLEARUSER')
 }
 
@@ -70,7 +72,7 @@ const setToken = ({commit}, payload) => {
 }
 
 const setUser = ({commit}, payload) => {
-    firestore().collection('users').where('email', '==', payload.email).get().then(
+    firebase.firestore().collection('users').where('email', '==', payload.email).get().then(
         snapshot => {
             snapshot.forEach(doc => {
                 payload.name = doc.data().name

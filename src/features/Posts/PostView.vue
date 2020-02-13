@@ -37,7 +37,8 @@
     </div>
 </template>
 <script>
-import { storage } from 'firebase'
+import * as firebase from 'firebase/app'
+import 'firebase/storage'
 import { mapState, mapActions } from 'vuex'
 export default {
     name: "PostView",
@@ -58,7 +59,7 @@ export default {
     methods: {
         ...mapActions('Posts', ['setSelectedPost']),
         getUrl() {
-            const fileRef = storage().ref().child('posts/' + this.post.uid + "/" + this.post.imageName)
+            const fileRef = firebase.storage().ref().child('posts/' + this.post.uid + "/" + this.post.imageName)
 
             fileRef.getDownloadURL().then(url => {
                 this.imageUrl = url

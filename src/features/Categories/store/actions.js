@@ -1,7 +1,8 @@
-import { firestore } from 'firebase'
+import * as firebase from 'firebase/app'
+import 'firebase/firestore'
 
 const getCategories = async ({commit}) => {
-    await firestore().collection('categories').get().then(snapshot => {
+    await firebase.firestore().collection('categories').get().then(snapshot => {
         if(snapshot.empty){
             commit('SETCATEGORIESLIST', [])
             return
@@ -21,7 +22,7 @@ const getCategories = async ({commit}) => {
 }
 
 const createCategory = async ({commit}, payload) => {
-    await firestore().collection('categories').add(payload)
+    await firebase.firestore().collection('categories').add(payload)
     .then(categoryRef => {
         const category = {
             uid: categoryRef.id,
@@ -45,7 +46,7 @@ const editCategory = async ({commit, state}, payload) => {
         type: payload.newType 
     }
 
-    const categoryRef = firestore().collection('categories').doc( state.selectedCategory.uid)
+    const categoryRef = firebase.firestore().collection('categories').doc( state.selectedCategory.uid)
     commit('REMOVECATEGORYFROMLIST', state.selectedCategory)
     await categoryRef.update({ 
         name: payload.newName, 
@@ -62,7 +63,7 @@ const editCategory = async ({commit, state}, payload) => {
 }
 
 const deleteCategory = async ({commit, state}) => {
-    const categoryRef = firestore().collection('categories')
+    const categoryRef = firebase.firestore().collection('categories')
                             .doc( state.selectedCategory.uid)
     commit('REMOVECATEGORYFROMLIST', state.selectedCategory)
     await categoryRef.delete()

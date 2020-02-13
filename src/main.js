@@ -3,7 +3,11 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-import { initializeApp, auth, firestore, storage } from 'firebase'
+// import { initializeApp, auth, firestore, storage } from 'firebase'
+import * as firebase from 'firebase/app'
+import 'firebase/firestore'
+import 'firebase/auth'
+import 'firebase/storage'
 import * as env from '../env.local'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import VueCkeditor from 'vue-ckeditor5'
@@ -36,8 +40,8 @@ new Vue({
   vuetify,
   render: h => h(App),
   created() {
-    initializeApp(firebaseConfig)
-    auth().onAuthStateChanged(user => {
+    firebase.initializeApp(firebaseConfig)
+    firebase.auth().onAuthStateChanged(user => {
         if(user) {
           const loggedUser = {
             id: user.uid,
@@ -50,5 +54,5 @@ new Vue({
     })
   }
 }).$mount('#app')
-export const db = firestore()
-export const fbStorage = storage()
+export const db = firebase.firestore()
+export const fbStorage = firebase.storage()

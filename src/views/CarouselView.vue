@@ -27,7 +27,8 @@
     </div>
 </template>
 <script>
-import { storage } from 'firebase'
+import * as firebase from 'firebase/app'
+import 'firebase/firestore'
 import { mapState, mapActions } from 'vuex'
 export default {
     name: "CarouselView",
@@ -54,7 +55,7 @@ export default {
             }
         },
         getUrl(randPost) {
-            const fileRef =  storage().ref().child('posts/' + randPost.uid + "/" + randPost.imageName)
+            const fileRef =  firebase.storage().ref().child('posts/' + randPost.uid + "/" + randPost.imageName)
             fileRef.getDownloadURL().then(url => {
                 randPost.imageUrl = url
                 this.posts.push(randPost)

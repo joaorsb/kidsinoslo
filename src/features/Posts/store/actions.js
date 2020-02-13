@@ -1,8 +1,10 @@
-import { firestore, storage } from 'firebase'
+import * as firebase from 'firebase/app'
+import 'firebase/firestore'
+import 'firebase/storage'
 
 const getPosts = async ({commit, state}) => {
     commit('SETLOADINGPOSTS', true)
-    const postsRef = firestore().collection('posts')
+    const postsRef = firebase.firestore().collection('posts')
     await postsRef.where("language", "==", state.selectedLanguage).orderBy('createdAt').get().then(snapshot => {
         if(snapshot.empty){
             commit('SETPOSTSLIST', [])
@@ -28,7 +30,7 @@ const clearPostsList = ({commit}) => {
 
 const searchPosts = async ({commit, state}, payload) => {
     commit('SETLOADINGPOSTS', true)
-    const postsRef = firestore().collection('posts')
+    const postsRef = firebase.firestore().collection('posts')
     await postsRef.where("language", "==", state.selectedLanguage)
     .where('title', '>=', payload).get().then(snapshot => {
         if(snapshot.empty){
@@ -55,13 +57,13 @@ const getPaginatedPosts = async ({commit, state, rootState}) => {
     commit('SETLOADINGPOSTS', true)
     let postsRef = null
     if(state.selectedNeighborhood){
-        postsRef = firestore().collection('posts')
+        postsRef = firebase.firestore().collection('posts')
         .where('neighborhood', '==', state.selectedNeighborhood)
     } else if(rootState.Categories.selectedCategory){
-        postsRef = firestore().collection('posts')
+        postsRef = firebase.firestore().collection('posts')
         .where('category', '==', rootState.Categories.selectedCategory.uid)
     } else {
-        postsRef = firestore().collection('posts')
+        postsRef = firebase.firestore().collection('posts')
     }
 
     if(state.page < 2){
@@ -122,12 +124,12 @@ const createPost = async ({commit}, payload) => {
         image = payload.image
         delete payload.image
     }
-    await firestore().collection('posts').add(payload).then(postRef => {
+    await firebase.firestore().collection('posts').add(payload).then(postRef => {
         payload.uid = postRef.id
         commit('ADDPOSTTOLIST', payload)
         commit('SETCURRENTUID', postRef.id)
         if(image) {
-            var storageRef = storage().ref().child('posts/' + payload.uid + "/" + image.name)
+            var storageRef = firebase.storage().ref().child('posts/' + payload.uid + "/" + image.name)
             storageRef.put(image) 
         }
     }).catch(error => {
@@ -138,9 +140,9 @@ const createPost = async ({commit}, payload) => {
 
 const updatePostImage = async ({commit, state}, payload) => {
     if(payload) {
-        var storageRef = storage().ref().child('posts/' + state.selectedPost.uid + "/" + payload.name)
+        var storageRef = firebase.storage().ref().child('posts/' + state.selectedPost.uid + "/" + payload.name)
         storageRef.put(payload).then(() => {
-            const postRef = firestore().collection('posts').doc(state.selectedPost.uid)
+            const postRef = firebase.firestore().collection('posts').doc(state.selectedPost.uid)
             postRef.update({
                 imageName: payload.name
             })
@@ -157,12 +159,12 @@ const updatePostImage = async ({commit, state}, payload) => {
 }
 
 const deletePostImage = async ({state}) => {
-    var storageRef = storage().ref().child('posts/' + state.selectedPost.uid + "/" + state.selectedPost.name)
+    var storageRef = firebase.storage().ref().child('posts/' + state.selectedPost.uid + "/" + state.selectedPost.name)
     storageRef.delete() 
 }
 
 const editPost = async ({commit}, payload) => {
-    const postRef = firestore().collection('posts').doc(payload.uid)
+    const postRef = firebase.firestore().collection('posts').doc(payload.uid)
     await postRef.update({
         uid: payload.uid,
         title: payload.title,
@@ -187,7 +189,7 @@ const editPost = async ({commit}, payload) => {
 }
 
 const deletePost = async ({commit, state}) => {
-    const postRef = firestore().collection('posts')
+    const postRef = firebase.firestore().collection('posts')
                             .doc( state.selectedPost.uid)
     commit('REMOVEPOSTFROMLIST', state.selectedPost.slug)
     await postRef.delete()

@@ -187,8 +187,8 @@
         </v-snackbar>
     </div>
 </template>
-<script>
-import { storage } from 'firebase'
+<script>import * as firebase from 'firebase/app'
+import 'firebase/firestore'
 import { mapState, mapActions } from 'vuex'
 import { slugfy } from '@/helpers/slugfy'
 export default {
@@ -242,7 +242,7 @@ export default {
         openImageDialog(index){
             const post = this.postsList[index]
             this.setSelectedPost(post)
-            const fileRef = storage().ref().child('posts/' + this.selectedPost.uid + "/" + this.selectedPost.imageName)
+            const fileRef = firebase.firebasestorage().ref().child('posts/' + this.selectedPost.uid + "/" + this.selectedPost.imageName)
             fileRef.getDownloadURL().then(url => {
                 this.imageUrl = url
             })

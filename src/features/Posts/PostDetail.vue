@@ -29,7 +29,8 @@
     </article>
 </template>
 <script>
-import { storage } from 'firebase'
+import * as firebase from 'firebase/app'
+import 'firebase/firestore'
 import { mapState, mapActions } from 'vuex'
 export default {
     name: "PostDetail",
@@ -44,7 +45,7 @@ export default {
     methods: {
         ...mapActions('Posts',['setSelectedPost']),
         getUrl() {
-            const fileRef = storage().ref().child('posts/' + this.selectedPost.uid + "/" + this.selectedPost.imageName)
+            const fileRef = firebase.storage().ref().child('posts/' + this.selectedPost.uid + "/" + this.selectedPost.imageName)
             fileRef.getDownloadURL().then(url => {
                 this.imageUrl = url
             })
