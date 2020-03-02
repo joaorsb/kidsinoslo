@@ -2,15 +2,25 @@
     <div>
         <v-card>
             <v-img 
-            :src="imageUrl"
-            class="white--text align-end"
-            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-            height="300px"
-            @click="details()"
+                :src="imageUrl"
+                eager
+                class="white--text align-end"
+                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                height="300px"
+                aspect-ratio="1"
+                @click="details()"
             >
-                <v-card-title v-text="post.title"></v-card-title>
+            <template v-slot:placeholder>
+                <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                >
+                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                </v-row>
+            </template>
+                <v-card-title v-text="this.post.title"></v-card-title>
             </v-img>
-
             <v-card-actions>
                 <v-spacer></v-spacer>
 
@@ -52,9 +62,6 @@ export default {
             type: Object,
             required: true
         }
-    },
-    mounted() {
-        // this.getUrl()
     },
     methods: {
         ...mapActions('Posts', ['setSelectedPost']),

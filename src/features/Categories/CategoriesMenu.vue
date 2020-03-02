@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-list>
-            <v-list-item-content>
+            <v-list-item-content class="mx-2">
                 <v-list-item-title>Gratis</v-list-item-title>
             </v-list-item-content>
             <v-list-item
@@ -14,7 +14,7 @@
         </v-list>
         <v-divider></v-divider>
         <v-list>
-            <v-list-item-content>
+            <v-list-item-content class="mx-2">
                 <v-list-item-title>Betaling</v-list-item-title>
             </v-list-item-content>
             <v-list-item

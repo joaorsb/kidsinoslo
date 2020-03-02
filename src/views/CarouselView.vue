@@ -1,7 +1,6 @@
 <template>
     <div v-if="posts.length > 0">
         <v-carousel
-            cycle
             height="400"
             show-arrows-on-hover
         >

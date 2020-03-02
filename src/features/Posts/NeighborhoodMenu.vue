@@ -2,7 +2,7 @@
     <div v-if="this.neighborhoodList.length > 0">
         <v-divider></v-divider>
         <v-list>
-            <v-list-item-content>
+            <v-list-item-content class="mx-2">
                 <v-list-item-title>Bydel</v-list-item-title>
             </v-list-item-content>
             <v-list-item

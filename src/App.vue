@@ -9,6 +9,12 @@
           <span class="font-weight-light"></span>
         </v-toolbar-title>
         <div class="flex-grow-1"></div>
+        <v-toolbar-items>
+          <v-switch class="my-5"
+            v-model="darkMode">
+          </v-switch>
+          <v-icon>mdi-moon-waxing-crescent</v-icon>
+        </v-toolbar-items>
         <v-toolbar-items class="hidden-sm-and-down" >
           <v-btn v-for="(language, index) in filteredLanguages" v-bind:key="index"
             text
@@ -27,7 +33,6 @@
             <span class="mr-2">{{item.title}}</span>
           </v-btn>
         </v-toolbar-items>
-        
     </v-app-bar>
 
     <v-content >
@@ -57,7 +62,7 @@
                 <v-icon>{{item.icon}}</v-icon>
               </v-list-item-icon>
 
-              <v-list-item-content>
+              <v-list-item-content >
                 <v-list-item-title>{{item.title}}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
@@ -71,7 +76,7 @@
           <categories-menu></categories-menu>
           <neighborhood-menu></neighborhood-menu>
           <v-list v-if="this.loggedUser && this.loggedUser.role.includes('admin')">
-              <v-list-item-content>
+              <v-list-item-content  class="mx-2">
                   <v-list-item-title>Admin area</v-list-item-title>
               </v-list-item-content>
               <v-list-item
@@ -104,7 +109,7 @@
               <neighborhood-menu></neighborhood-menu>
               <v-divider></v-divider>
               <v-list v-if="this.loggedUser && this.isAdmin">
-                  <v-list-item-content>
+                  <v-list-item-content class="mx-2">
                       <v-list-item-title>Admin actions</v-list-item-title>
                   </v-list-item-content>
                  <v-list-item
@@ -138,6 +143,7 @@
     name: 'App',
     data: () => ({
       navBarMenu: false,
+      darkMode: false,
     }),
     methods: {
       ...mapActions('Accounts', ['clearAuthError', 'setToken']),
@@ -171,14 +177,27 @@
           if(this.$router.history.current.path !== '/'){
                 this.$router.push('/')
             }
+        },
+        getDarkMode() {
+          return JSON.parse(localStorage.getItem('darkMode'))
+        },
+        setDarkModeOnLocalStorage(value) {
+          if (localStorage.setItem('darkMode', value)) return true
+          return false
         }
     },
-    mounted() {
+    created() {
       if(this.categoriesList.length === 0) {
         this.getCategories()
       }
       if(this.paginatedPosts.length === 0) {
         this.getPaginatedPosts()
+      }
+    },
+    beforeMount() {
+      const localDarkMode = this.getDarkMode()
+      if(localDarkMode === true) {
+        this.darkMode = true
       }
     }, 
     computed: {
@@ -228,6 +247,15 @@
           this.clearAuthError()
         }
       },
+      darkMode (value) {
+        if(value === true) {
+          this.$vuetify.theme.dark = true
+          this.setDarkModeOnLocalStorage(true)
+        } else {
+          this.$vuetify.theme.dark = false
+          this.setDarkModeOnLocalStorage(false)
+        }
+      }
     },
   };
 </script>
