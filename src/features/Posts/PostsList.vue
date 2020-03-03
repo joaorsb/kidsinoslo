@@ -6,12 +6,12 @@
             height="94"
             type="list-item-two-line"
           >
-          <v-container fluid v-if="this.paginatedPosts.length > 0">
+          <v-container v-if="this.paginatedPosts.length > 0">
               <v-row dense>
                   <v-col
-                  v-for="(post, index) in this.paginatedPosts"
-                  :key="index"
-                  cols="6"
+                    v-for="(post, index) in this.paginatedPosts"
+                    :key="index"
+                    md="6" cols="12"
                   >
                     <post-view :post='post'></post-view>
                   </v-col>

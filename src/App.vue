@@ -36,60 +36,63 @@
     </v-app-bar>
 
     <v-content >
-      <v-navigation-drawer
-          v-model="navBarMenu"
-          absolute
-          temporary
-        >
-          <v-divider></v-divider>
-          
-          <v-list dense>
-            <v-list-item
-              link
-              v-for="(language, index) in filteredLanguages" v-bind:key="index"
-              @click="setSelectedLanguague(language.value)"
-            >
-              <v-list-item-content>
-                <v-list-item-title>{{language.name}}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item
-              link
-              v-for="item in menuItems" v-bind:key="item.title"
-              :to=item.url
-            >
-              <v-list-item-icon>
-                <v-icon>{{item.icon}}</v-icon>
-              </v-list-item-icon>
-
-              <v-list-item-content >
-                <v-list-item-title>{{item.title}}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-          <v-divider></v-divider>
-          <v-list>
-            <v-list-item @click="filterAll()">
-                <v-list-item-title>Alle aktiviteter</v-list-item-title>
-            </v-list-item>
-          </v-list>
-          <categories-menu></categories-menu>
-          <neighborhood-menu></neighborhood-menu>
-          <v-list v-if="this.loggedUser && this.loggedUser.role.includes('admin')">
-              <v-list-item-content  class="mx-2">
-                  <v-list-item-title>Admin area</v-list-item-title>
-              </v-list-item-content>
+      <v-card v-show="navBarMenu" height="500" width="100%" class="mx-auto">
+        <v-navigation-drawer
+            v-model="navBarMenu"
+            width="80%"
+            absolute
+            temporary
+          >
+            <v-divider></v-divider>
+            
+            <v-list dense>
               <v-list-item
                 link
-                v-for="item in menuAdmin" v-bind:key="item.title"
-                :to=item.url
+                v-for="(language, index) in filteredLanguages" v-bind:key="index"
+                @click="setSelectedLanguague(language.value)"
               >
                 <v-list-item-content>
+                  <v-list-item-title>{{language.name}}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item
+                link
+                v-for="item in menuItems" v-bind:key="item.title"
+                :to=item.url
+              >
+                <v-list-item-icon>
+                  <v-icon>{{item.icon}}</v-icon>
+                </v-list-item-icon>
+
+                <v-list-item-content >
                   <v-list-item-title>{{item.title}}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-          </v-list>
-      </v-navigation-drawer>
+            </v-list>
+            <v-divider></v-divider>
+            <v-list>
+              <v-list-item @click="filterAll()">
+                  <v-list-item-title>Alle aktiviteter</v-list-item-title>
+              </v-list-item>
+            </v-list>
+            <categories-menu></categories-menu>
+            <neighborhood-menu></neighborhood-menu>
+            <v-list v-if="this.loggedUser && this.loggedUser.role.includes('admin')">
+                <v-list-item-content  class="mx-2">
+                    <v-list-item-title>Admin area</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item
+                  link
+                  v-for="item in menuAdmin" v-bind:key="item.title"
+                  :to=item.url
+                >
+                  <v-list-item-content>
+                    <v-list-item-title>{{item.title}}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+            </v-list>
+        </v-navigation-drawer>
+      </v-card>
       <v-container >
 
           <v-row class="d-flex">
