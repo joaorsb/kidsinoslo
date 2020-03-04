@@ -2,13 +2,14 @@
     <div>
         <v-card>
             <v-img 
-                :src="imageUrl"
+                :src="post.imageUrlThumb"
                 eager
                 class="white--text align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                height="300px"
+                height="150px"
                 aspect-ratio="1"
                 @click="details()"
+                v-if="hasImageUrl"
             >
             <template v-slot:placeholder>
                 <v-row
@@ -21,20 +22,23 @@
             </template>
                 <v-card-title v-text="this.post.title"></v-card-title>
             </v-img>
+            <!-- #EF9A9A -->
+            <v-sheet
+                v-else
+                color="#E1BEE7"
+                height="150px"
+                @click="details()"
+            >
+                <v-row
+                    class="fill-height"
+                    align="center"
+                    justify="center"
+                >
+                <v-card-title v-text="this.post.title" color="black"></v-card-title>
+                </v-row>
+            </v-sheet>
             <v-card-actions>
                 <v-spacer></v-spacer>
-
-                <!-- <v-btn icon>
-                    <v-icon>mdi-heart</v-icon>
-                </v-btn>
-
-                <v-btn icon>
-                    <v-icon>mdi-bookmark</v-icon>
-                </v-btn>
-
-                <v-btn icon>
-                    <v-icon>mdi-share-variant</v-icon>
-                </v-btn> -->
                 <v-btn
                     text
                     
@@ -54,7 +58,8 @@ export default {
     name: "PostView",
     data() {
         return {
-            imageUrl: ""
+            imageUrl: "",
+            hasImageUrl: true
         }
     },
     props: {
@@ -64,12 +69,17 @@ export default {
         }
     },
     methods: {
-        ...mapActions('Posts', ['setSelectedPost']),
+        ...mapActions('Posts', ['setSelectedPost', 'getPostGeolocation']),
         getUrl() {
-            const fileRef = firebase.storage().ref().child('posts/' + this.post.uid + "/" + this.post.imageName)
+            let thumbImage = this.post.imageName.replace('.jpg', '@s_400.jpg')
+            if(thumbImage == this.post.imageName) {
+                thumbImage = this.post.imageName.replace('.JPG', '@s_400.JPG')
+            }
+            const fileRef = firebase.storage().ref().child(`posts/${this.post.uid}/${thumbImage}`)
 
             fileRef.getDownloadURL().then(url => {
                 this.imageUrl = url
+                this.post.imageUrlThumb = url
             })
             .catch(error => {
                 switch (error.code) {
@@ -84,12 +94,19 @@ export default {
 
                     case 'storage/unknown':
                     break;
+                    default:
+                        this.post.imageUrl = ""
+                        this.hasImageUrl = false
+                        break;
                 }
 
             })
         },
         details() {
             this.setSelectedPost(this.post)
+            if(!this.post.lat || ! this.post.lng) {
+                this.getPostGeolocation()
+            }
             this.$router.push({name: "post-detail", params: {slug: this.selectedPost.slug }})
         },
     },
@@ -102,8 +119,14 @@ export default {
             deep: true,
             handler: function(value) {
                 if(value) {
-                    this.imageUrl = ""
-                    this.getUrl()
+                    if(value.imageName !== null) {
+                        if(value.imageUrlThumb === '')
+                            this.getUrl()
+                            // this.hasImageUrl = false
+                    } else {
+                        this.imageUrl = ""
+                        this.hasImageUrl = false
+                    }
                 }
             }
         }

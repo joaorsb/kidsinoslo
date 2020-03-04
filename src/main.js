@@ -11,6 +11,9 @@ import 'firebase/storage'
 import * as env from '../env.local'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import VueCkeditor from 'vue-ckeditor5'
+import * as VueGoogleMaps from 'vue2-google-maps'
+import VueDisqus from 'vue-disqus'
+
 
 Vue.config.productionTip = false
 const files = require.context('./', true, /\.vue$/i)
@@ -32,7 +35,16 @@ const options = {
   name: 'ckeditor'
 }
 
-Vue.use(VueCkeditor.plugin, options);
+Vue.use(VueCkeditor.plugin, options)
+Vue.use(VueDisqus)
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: env.googleMapsApiKey,
+    libraries: 'places',
+  },
+  installComponents: true
+})
 
 new Vue({
   router,

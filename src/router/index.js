@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Register from '@/features/Accounts/Register'
+// import Register from '@/features/Accounts/Register'
 import Login from '@/features/Accounts/Login'
 import Logout from '@/features/Accounts/Logout'
 import PostsList from '@/features/Posts/PostsList'
@@ -19,11 +19,11 @@ const routes = [
     name: 'home',
     component: PostsList
   },
-  {
-    path: '/register',
-    name: 'register',
-    component: Register
-  },
+  // {
+    // path: '/register',
+    // name: 'register',
+    // component: Register
+  // },
   {
     path: '/login',
     name: 'login',

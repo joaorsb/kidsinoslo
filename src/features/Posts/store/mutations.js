@@ -14,6 +14,10 @@ const ADDPOSTTOPAGINATEDPOSTS = (state, payload) => {
     state.paginatedPosts.push(payload)
 }
 
+const ADDNEWPOSTTOPAGINATEDPOSTS = (state, payload) => {
+    state.paginatedPosts.unshift(payload)
+}
+
 const CLEARPAGINATEDPOSTS = (state) => {
     state.paginatedPosts = []
 }
@@ -52,6 +56,10 @@ const REMOVEPOSTFROMLIST = (state, payload) => {
     state.postsList = state.postsList.filter(post => post.slug !== payload)
 }
 
+const REMOVEPOSTFROMPAGINATEDPOSTS = (state, payload) => {
+    state.postsList = state.paginatedPosts.filter(post => post.slug !== payload)
+}
+
 const SETPAGINATIONPAGE = (state, payload) => {
     state.page = payload
 }
@@ -79,5 +87,7 @@ export default {
     ADDMOREPOSTTOPAGINATEDPOSTS,
     CLEARPAGINATEDPOSTS,
     SETLANGUAGE,
-    SETLOADINGPOSTS
+    SETLOADINGPOSTS,
+    REMOVEPOSTFROMPAGINATEDPOSTS,
+    ADDNEWPOSTTOPAGINATEDPOSTS
 }

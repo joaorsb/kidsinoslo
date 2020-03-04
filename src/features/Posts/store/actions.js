@@ -1,6 +1,7 @@
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/storage'
+import axios from 'axios'
 
 const getPosts = async ({commit, state}) => {
     commit('SETLOADINGPOSTS', true)
@@ -30,9 +31,10 @@ const clearPostsList = ({commit}) => {
 
 const searchPosts = async ({commit, state}, payload) => {
     commit('SETLOADINGPOSTS', true)
+    const nameCapitalized = payload.charAt(0).toUpperCase() + payload.slice(1)
     const postsRef = firebase.firestore().collection('posts')
     await postsRef.where("language", "==", state.selectedLanguage)
-    .where('title', '>=', payload).get().then(snapshot => {
+    .where('title', '>', nameCapitalized).get().then(snapshot => {
         if(snapshot.empty){
             commit('SETPOSTSLIST', [])
             return
@@ -73,8 +75,10 @@ const getPaginatedPosts = async ({commit, state, rootState}) => {
                 return
             } 
             snapshot.forEach(doc => {
-                let post = doc.data()
+                const post = doc.data()
                 post.uid = doc.id
+                post.imageUrl = ""
+                post.imageUrlThumb = ""
                 if(post.language == state.selectedLanguage) {
                     commit('ADDPOSTTOPAGINATEDPOSTS', post)
                 }
@@ -100,6 +104,8 @@ const getPaginatedPosts = async ({commit, state, rootState}) => {
             snapshot.forEach(doc => {
                 let post = doc.data()
                 post.uid = doc.id
+                post.imageUrl = ""
+                post.imageUrlThumb = ""
                 if(post.language === state.selectedLanguage) {
                     commit('ADDMOREPOSTTOPAGINATEDPOSTS', post)
                 }
@@ -124,16 +130,30 @@ const createPost = async ({commit}, payload) => {
         image = payload.image
         delete payload.image
     }
+    try{
+        var { data } = await axios.post(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${payload.address}+Oslo&key=AIzaSyADaD5ZdjzHBTyNT4s5CkOe1B8KAk5pthw`
+        )
+        if(data.error_message) {
+            commit('SETERRORMESSAGE',data.error_message)
+        } else {
+            payload.lat = data.results[0].geometry.location.lat
+            payload.lng = data.results[0].geometry.location.lng
+        }
+    } catch (error) {
+        commit('SETERRORMESSAGE', error.message);
+    }
+
     await firebase.firestore().collection('posts').add(payload).then(postRef => {
         payload.uid = postRef.id
-        commit('ADDPOSTTOLIST', payload)
+        commit('ADDNEWPOSTTOPAGINATEDPOSTS', payload)
         commit('SETCURRENTUID', postRef.id)
         if(image) {
             var storageRef = firebase.storage().ref().child('posts/' + payload.uid + "/" + image.name)
             storageRef.put(image) 
         }
     }).catch(error => {
-        alert(error)
+        commit('SETERRORMESSAGE', error)
     })
     
 }
@@ -158,7 +178,7 @@ const updatePostImage = async ({commit, state}, payload) => {
     }
 }
 
-const deletePostImage = async ({state}) => {
+const deletePostImage = async ({ state }) => {
     var storageRef = firebase.storage().ref().child('posts/' + state.selectedPost.uid + "/" + state.selectedPost.name)
     storageRef.delete() 
 }
@@ -190,10 +210,10 @@ const editPost = async ({commit}, payload) => {
 
 const deletePost = async ({commit, state}) => {
     const postRef = firebase.firestore().collection('posts')
-                            .doc( state.selectedPost.uid)
-    commit('REMOVEPOSTFROMLIST', state.selectedPost.slug)
+                            .doc(state.selectedPost.uid)
     await postRef.delete()
     .then(() => {
+        commit('REMOVEPOSTFROMPAGINATEDPOSTS', state.selectedPost.slug)
         commit('SETSELECTEDPOST', null)
     })    
     .catch(function(err) {
@@ -222,6 +242,57 @@ const setLanguage = ({commit}, payload) => {
     commit('SETLANGUAGE', payload)
 }
 
+const addNewPostToPaginatedList = ({commit}, payload) => {
+    commit('ADDNEWPOSTTOPAGINATEDPOSTS', payload)
+}
+
+const getPostBySlug = async ({ commit }, payload) => {
+    commit('SETLOADINGPOSTS', true)
+    const postsRef = firebase.firestore().collection('posts')
+    await postsRef.where("slug", "==", payload).get().then(snapshot => {
+        if(snapshot.empty){
+            commit('SETSELECTEDPOST', null)
+            return
+        } 
+        snapshot.forEach(doc => {
+            let post = doc.data()
+            post.uid = doc.id
+            post.imageUrl = ''
+            commit('SETSELECTEDPOST', post)
+        })
+    }).catch(err => {
+        commit('SETERRORMESSAGE', err)
+    })
+    commit('SETLOADINGPOSTS', false)
+}
+
+const getPostGeolocation = async ({ commit, state }) => {
+    try{
+        var { data } = await axios.post(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${state.selectedPost.address}+Oslo&key=AIzaSyADaD5ZdjzHBTyNT4s5CkOe1B8KAk5pthw`
+        );
+        if(data.error_message) {
+            commit('SETERRORMESSAGE', data.error_message)
+        } else {
+            state.selectedPost.lat = data.results[0].geometry.location.lat
+            state.selectedPost.lng = data.results[0].geometry.location.lng
+            const postRef = firebase.firestore().collection('posts').doc(state.selectedPost.uid)
+            await postRef.update({
+                lat: state.selectedPost.lat,
+                lng: state.selectedPost.lng,
+            })
+            .then(() => {
+                commit('REPLACEPOSTFROMLIST', state.selectedPost)
+            })
+            .catch(function(err) {
+                commit('SETERRORMESSAGE', err)
+            })
+        }
+    } catch (error) {
+        commit('SETERRORMESSAGE', error.message);
+    }
+}
+
 export default {
     getPosts,
     createPost,
@@ -237,4 +308,7 @@ export default {
     updatePostImage,
     deletePostImage,
     setLanguage,
+    addNewPostToPaginatedList,
+    getPostBySlug,
+    getPostGeolocation
 }

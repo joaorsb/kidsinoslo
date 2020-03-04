@@ -18,7 +18,7 @@
                 align="center"
                 justify="center"
                 >
-                    <div class="display-2 font-weight-thin" >
+                    <div class="display-2 font-weight-thin hidden-sm-and-down" >
                         <span class="info-title" v-text="post.title"></span>
                     </div>
                 </v-row>
@@ -50,7 +50,8 @@ export default {
                 if( ! numbers.includes(number) && this.paginatedPosts.length > number) {
                     numbers.push(number)
                     let randomPost = this.paginatedPosts[number]
-                    this.getUrl(randomPost)
+                    if (randomPost.imageName)
+                        this.getUrl(randomPost)
                 }
             }
         },

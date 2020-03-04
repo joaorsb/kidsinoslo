@@ -12,30 +12,33 @@
             </v-btn>
         </div>
         <v-divider></v-divider>
-
         <v-list>
             <v-list-item
                 v-for="(post, index) in postsList"
                 :key="index"
             >
                 <template>
-                    <v-list-item-title @click="selectPost(index)">
+                    <v-list-item-title>
+                        <v-btn  text
+                        @click="selectPost(index)" 
+                    >
                         {{ post.title }}
+                    </v-btn> 
                     </v-list-item-title>
                        
                     <v-btn  text
                         color="teal" 
                         @click="openImageDialog(index)" 
                     >
-                        Change image
+                        <span class="d-none d-sm-flex">Change image</span>
+                        <v-icon>mdi-camera</v-icon>
                     </v-btn> 
                     <v-btn text  
                         color="error" 
-                        @click="deletePost()" 
+                        @click="selectAndDeletePost(index)" 
                         align="end" >
-                        Delete post
+                        <span class="d-none d-sm-flex">Delete post</span>
                         <v-icon>mdi-delete</v-icon>
-
                     </v-btn>
                 </template>
             </v-list-item>
@@ -118,9 +121,9 @@
                                                     Description:
                                                 </label>
                                             </v-col>
-                                            <v-col cols="12">
+                                            <v-col cols="12" class="editor-text">
                                                 <ckeditor id="description"
-                                                    class=""
+                                                    style="color: black"
                                                     name="description"
                                                     type="classic"
                                                     tag="textarea"
@@ -207,7 +210,7 @@ export default {
         }
     },
     computed: {
-        ...mapState('Posts', ['postsList', 'selectedPost', 'languages']),
+        ...mapState('Posts', ['selectedPost', 'languages', 'postsList']),
         ...mapState('Categories', ['categoriesList']),
     },
     methods: {
@@ -216,9 +219,9 @@ export default {
             'editPost', 
             'deletePost', 
             'searchPosts',
-            'clearPostsList',
             'updatePostImage',
             'deletePostImage',
+            'clearPostsList'
         ]),
         selectPost(index) {
             const post = this.postsList[index]
@@ -242,23 +245,31 @@ export default {
         openImageDialog(index){
             const post = this.postsList[index]
             this.setSelectedPost(post)
-            const fileRef = firebase.firebasestorage().ref().child('posts/' + this.selectedPost.uid + "/" + this.selectedPost.imageName)
+            const fileRef = firebase.storage().ref().child('posts/' + this.selectedPost.uid + "/" + this.selectedPost.imageName)
             fileRef.getDownloadURL().then(url => {
                 this.imageUrl = url
             })
             .catch(error => {
                 switch (error.code) {
                     case 'storage/object-not-found':
-                    break;
+                        this.snackbar = true
+                        this.snackText = "Photo is missing"
+                        break;
 
                     case 'storage/unauthorized':
-                    break;
+                        this.snackbar = true
+                        this.snackText = "Not authorized"
+                        break;
 
                     case 'storage/canceled':
-                    break;
+                        this.snackbar = true
+                        this.snackText = "Account problems"
+                        break;
 
                     case 'storage/unknown':
-                    break;
+                        this.snackbar = true
+                        this.snackText = "Unknown error"
+                        break;
                 }
             })
             this.dialogImage = true
@@ -266,11 +277,20 @@ export default {
         updateImage(event){
             event.preventDefault()
             if(this.photo){
+                this.photo.name.replace('.JPG', '.jpg')
                 this.updatePostImage(this.photo)
             }
             this.dialogImage = false
             this.snackbar = true
             this.snackText = "Photo Uploaded"
+        },
+        selectAndDeletePost(index) {
+            const post = this.postsList[index]
+            this.setSelectedPost(post)
+            const allowedToDelete = confirm("Really wants to delete?")
+            if(allowedToDelete) {
+                this.deletePost()
+            }
         }
     },
     watch: {
@@ -285,3 +305,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+    .editor-text {
+        color: black !important;
+    }
+</style>

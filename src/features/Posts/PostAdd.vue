@@ -47,13 +47,7 @@
         ></v-select>
         
         <v-row>
-            <v-col cols="3">
-                <label for="body"
-                   class="">
-                    Description:
-                </label>
-            </v-col>
-            <v-col cols="12">
+            <v-col cols="12" class="editor-text">
                 <ckeditor id="description"
                     class=""
                     name="description"
@@ -83,7 +77,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions('Posts', ['createPost']),
+        ...mapActions('Posts', ['createPost', 'addNewPostToPaginatedList']),
         submit(event){
             event.preventDefault()
             this.post.owner = this.loggedUser.id
@@ -91,6 +85,7 @@ export default {
             this.post.slug = slugfy(this.post.title)
             this.post.category = this.category
             if(this.photo){
+                this.photo.name.replace('.JPG', '.jpg')
                 this.post.imageName = this.photo.name
                 this.post.image = this.photo
             }
@@ -111,5 +106,7 @@ export default {
 }
 </script>
 <style scoped>
-    
+    .editor-text {
+        color: black !important;
+    }
 </style>

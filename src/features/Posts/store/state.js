@@ -18,7 +18,7 @@ export default {
     },
     postsList: [],
     errorMessage: '',
-    selectedPost: undefined,
+    selectedPost: null,
     languages: [
         { name: 'Norsk', value: 'no' },
         { name: 'English', value: 'en' }

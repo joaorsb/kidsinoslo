@@ -96,7 +96,7 @@
       <v-container >
 
           <v-row class="d-flex">
-            <v-col cols="12">
+            <v-col cols="12" >
               <carousel-view 
                 v-if="this.paginatedPosts.length > 0 && this.$router.history.current.path === '/'">
               </carousel-view>
@@ -240,11 +240,6 @@
       }
     },
     watch: {
-      loggedUser (value)  {
-        if(value.id !== "" && value.id !== undefined && this.$router.history.current.path !== '/'){
-          this.$router.push('/')
-        }
-      },
       '$route' () {
         if(this.authError){
           this.clearAuthError()

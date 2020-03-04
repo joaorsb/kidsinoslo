@@ -1,8 +1,16 @@
 <template>
-    <article>
+    <article v-if="this.selectedPost">
+        <v-container>
+            <v-row>
+                <v-col align-self="end">
+                    <v-btn text @click="back()" class="float-right"><v-icon>mdi-arrow-left</v-icon>Back</v-btn>
+                </v-col>
+            </v-row>
+        </v-container>
         <v-card>
             <v-img
-            :src="imageUrl"
+            :src="selectedPost.imageUrl"
+            height="400"
             >
             </v-img>
             <v-card-title v-text="this.selectedPost.title"></v-card-title>
@@ -24,8 +32,18 @@
                 </v-list-item>
             </v-list>
         </section>
-        
-            
+        <div v-if="this.selectedPost">
+            <GmapMap :center="this.position" 
+                :zoom="17" class="mt-3"
+                style="width: 100%; height: 400px" 
+                v-if="this.selectedPost.lat"
+            >
+                <GmapMarker :position="this.position" :clickable="true" :draggable="true" ></GmapMarker>
+            </GmapMap>
+            <div class="comments mt-4">
+                <vue-disqus shortname="kids-in-oslo" :identifier="this.selectedPost.uid" ></vue-disqus>
+            </div>
+        </div>
     </article>
 </template>
 <script>
@@ -36,18 +54,33 @@ export default {
     name: "PostDetail",
     data() {
         return {
-            imageUrl: ""
+            imageUrl: "",
+            position: {
+                lat: 0,
+                lng: 0
+            }
+        }
+    },
+    beforeMount() {
+        if(this.selectedPost === null){
+            this.getPostBySlug(this.$route.params.slug)
+        } else {
+            if(this.selectedPost.imageUrl === '') {
+                this.getUrl()
+            }
+            this.position.lat = this.selectedPost.lat
+            this.position.lng = this.selectedPost.lng
         }
     },
     mounted() {
-        this.getUrl()
     },
     methods: {
-        ...mapActions('Posts',['setSelectedPost']),
+        ...mapActions('Posts',['setSelectedPost', 'getPostBySlug', 'getPostGeolocation']),
         getUrl() {
             const fileRef = firebase.storage().ref().child('posts/' + this.selectedPost.uid + "/" + this.selectedPost.imageName)
             fileRef.getDownloadURL().then(url => {
                 this.imageUrl = url
+                this.selectedPost.imageUrl = url
             })
             .catch(error => {
                 switch (error.code) {
@@ -65,6 +98,9 @@ export default {
                 }
 
             })
+        },
+        back() {
+            this.$router.back()
         }
     },
     computed: {
@@ -72,10 +108,22 @@ export default {
         ...mapState('Posts', ['selectedPost']),
         category() {
             return this.categoriesList.filter(category => category.uid == this.selectedPost.category)[0]
-        },
+        }
     },
     beforeDestroy() {
         this.setSelectedPost(null)
+    },
+    watch: {
+        selectedPost(value) {
+            if(value){
+                this.getPostGeolocation()
+                this.position.lat = this.selectedPost.lat
+                this.position.lng = this.selectedPost.lng
+                if(value.imageName !== null) {
+                    this.getUrl()
+                }
+            }
+        }
     }
 }
 </script>
