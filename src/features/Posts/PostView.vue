@@ -11,15 +11,15 @@
                 @click="details()"
                 v-if="hasImageUrl"
             >
-            <template v-slot:placeholder>
-                <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                >
-                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                </v-row>
-            </template>
+                <template v-slot:placeholder>
+                    <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
+                    >
+                        <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                    </v-row>
+                </template>
                 <v-card-title v-text="this.post.title"></v-card-title>
             </v-img>
             <!-- #EF9A9A -->

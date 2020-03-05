@@ -283,6 +283,7 @@ export default {
             this.dialogImage = false
             this.snackbar = true
             this.snackText = "Photo Uploaded"
+            this.photo = null
         },
         selectAndDeletePost(index) {
             const post = this.postsList[index]

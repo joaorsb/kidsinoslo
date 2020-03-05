@@ -12,6 +12,15 @@
             :src="selectedPost.imageUrl"
             height="400"
             >
+                <template v-slot:placeholder>
+                    <v-row
+                        class="fill-height ma-0"
+                        align="center"
+                        justify="center"
+                    >
+                        <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                    </v-row>
+                </template>
             </v-img>
             <v-card-title v-text="this.selectedPost.title"></v-card-title>
             <v-card-text v-text="category.name"></v-card-text>
