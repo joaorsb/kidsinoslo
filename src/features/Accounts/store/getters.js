@@ -19,7 +19,9 @@ const token = (state) => {
 }
 
 const isAdmin = (state) => {
-    return state.user.role  !== [] && state.user.role.includes('admin')
+    if (state.user.role === null)
+        return false
+    return state.user.role  !== null && state.user.role.includes('admin')
 }
 
 export default {

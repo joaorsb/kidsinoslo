@@ -6,7 +6,7 @@ export default {
         name: undefined,
         email: undefined,
         password: '',
-        role: []
+        role: null
     },
     token: null,
     isLoading: false,

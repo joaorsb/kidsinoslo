@@ -33,8 +33,6 @@ const register = async ({commit, state}) => {
 const login = async ({commit, state}) => {
     commit('SETLOADING', true)
     commit('CLEARAUTHERROR')
-
-
     firebase.auth().signInWithEmailAndPassword(state.user.email, state.user.password).then(
         () => {
             commit('SETLOADING', false)

@@ -31,7 +31,8 @@ const CLEARUSER = (state) => {
         id: undefined,
         name: undefined,
         email: undefined,
-        password: ''
+        password: '',
+        role: null
     }
 }
 

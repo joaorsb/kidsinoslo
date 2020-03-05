@@ -17,13 +17,14 @@
 <script>
     import { mapActions } from 'vuex'
     export default {
-        methods: {
-            ...mapActions('Accounts', ['clearUser', 'clearToken'])
-        },
-        mounted() {
-            this.clearUser()
-            this.clearToken()
-        }
+      methods: {
+        ...mapActions('Accounts', ['clearUser', 'clearToken'])
+      },
+      mounted() {
+        this.clearUser()
+        this.clearToken()
+        this.$router.push('/')
+      }
     }
 </script>
 <style scoped>

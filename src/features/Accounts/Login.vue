@@ -10,20 +10,23 @@
             persistent-hint
             outlined
           ></v-text-field>
-            <v-text-field
-                v-model="user.password"
-                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                :rules="[rules.required,]"
-                :type="showPassword ? 'text' : 'password'"
-                name="input-10-1"
-                label="Digite sua senha"
-                outlined
-                counter
-                @click:append="showPassword = !showPassword"
-            ></v-text-field>
+          <v-text-field
+            v-model="user.password"
+            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            :rules="[rules.required,]"
+            :type="showPassword ? 'text' : 'password'"
+            name="input-10-1"
+            label="Digite sua senha"
+            outlined
+            counter
+            @click:append="showPassword = !showPassword"
+          >
+          </v-text-field>
             <v-btn block color="primary"
-                   type="submit"
-                   :disabled="! showSubmit">
+              type="submit"
+              :disabled="! showSubmit"
+              @click="loginUser"
+            >
               Send
             </v-btn>
             
@@ -49,7 +52,11 @@
         }
     },
     methods: {
-      ...mapActions('Accounts', ['login'])
+      ...mapActions('Accounts', ['login']),
+      loginUser() {
+        this.login()
+        this.$router.push('/')
+      }
     },
     computed: {
         ...mapState('Accounts', ['user']),

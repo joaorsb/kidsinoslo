@@ -77,20 +77,22 @@
             </v-list>
             <categories-menu></categories-menu>
             <neighborhood-menu></neighborhood-menu>
-            <v-list v-if="this.loggedUser && this.loggedUser.role.includes('admin')">
-                <v-list-item-content  class="mx-2">
-                    <v-list-item-title>Admin area</v-list-item-title>
-                </v-list-item-content>
-                <v-list-item
-                  link
-                  v-for="item in menuAdmin" v-bind:key="item.title"
-                  :to=item.url
-                >
-                  <v-list-item-content>
-                    <v-list-item-title>{{item.title}}</v-list-item-title>
+            <div v-if="this.loggedUser.role !== null">
+              <v-list v-if="isAdmin">
+                  <v-list-item-content  class="mx-2">
+                      <v-list-item-title>Admin area</v-list-item-title>
                   </v-list-item-content>
-                </v-list-item>
-            </v-list>
+                  <v-list-item
+                    link
+                    v-for="item in menuAdmin" v-bind:key="item.title"
+                    :to=item.url
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title>{{item.title}}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+              </v-list>
+            </div>
         </v-navigation-drawer>
       </v-card>
       <v-container >
@@ -240,6 +242,11 @@
       }
     },
     watch: {
+      // loggedUser (value)  {
+      //   if(value){
+      //     console.log(value)
+      //   }
+      // },
       '$route' () {
         if(this.authError){
           this.clearAuthError()

@@ -47,7 +47,9 @@ export default {
             let numbers = []
             for(let i = 0; i < 5; i++){
                 const number = Math.round((Math.random() * 10) + 1)
-                if( ! numbers.includes(number) && this.paginatedPosts.length > number) {
+                if( ! numbers.includes(number) 
+                    && this.paginatedPosts.length > number
+                    && this.posts.length < 5) {
                     numbers.push(number)
                     let randomPost = this.paginatedPosts[number]
                     if (randomPost.imageName)

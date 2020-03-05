@@ -42,12 +42,14 @@ const routes = [
   {
     path: '/posts/add',
     name: 'posts-add',
-    component: PostAdd
+    component: PostAdd,
+    beforeEnter: AuthGuard
   },
   {
     path: '/posts/edit',
     name: 'posts-edit',
-    component: PostEdit
+    component: PostEdit,
+    beforeEnter: AuthGuard
   },
   {
     path: '/posts/:slug',
