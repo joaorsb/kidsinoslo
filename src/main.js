@@ -26,7 +26,8 @@ const firebaseConfig = {
   projectId: env.projectId,
   storageBucket: env.storageBucket,
   messagingSenderId: env.messagingSenderId,
-  appId: env.appId
+  appId: env.appId,
+  measurementId: env.measurementId
 }
 const options = {
   editors: {
