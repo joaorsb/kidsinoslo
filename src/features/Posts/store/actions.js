@@ -79,6 +79,15 @@ const getPaginatedPosts = async ({commit, state, rootState}) => {
                 post.uid = doc.id
                 post.imageUrl = ""
                 post.imageUrlThumb = ""
+                if(post.imageName) {
+                    const baseImageUri = `https://firebasestorage.googleapis.com/v0/b/kids-in-oslo.appspot.com/o/posts%2F${post.uid}%2F`
+                    post.imageUrl = `${baseImageUri}${post.imageName}?alt=media`
+                    let thumbImage = post.imageName.replace('.jpg', '@s_400.jpg')
+                    if(thumbImage == post.imageName) {
+                        thumbImage = post.imageName.replace('.JPG', '@s_400.JPG')
+                    }
+                    post.imageUrlThumb = `${baseImageUri}${thumbImage}?alt=media`
+                }
                 if(post.language == state.selectedLanguage) {
                     commit('ADDPOSTTOPAGINATEDPOSTS', post)
                 }
@@ -106,6 +115,15 @@ const getPaginatedPosts = async ({commit, state, rootState}) => {
                 post.uid = doc.id
                 post.imageUrl = ""
                 post.imageUrlThumb = ""
+                if(post.imageName) {
+                    const baseImageUri = `https://firebasestorage.googleapis.com/v0/b/kids-in-oslo.appspot.com/o/posts%2F${post.uid}%2F`
+                    post.imageUrl = `${baseImageUri}${post.imageName}?alt=media`
+                    let thumbImage = post.imageName.replace('.jpg', '@s_400.jpg')
+                    if(thumbImage == post.imageName) {
+                        thumbImage = post.imageName.replace('.JPG', '@s_400.JPG')
+                    }
+                    post.imageUrlThumb = `${baseImageUri}${thumbImage}?alt=media`
+                }
                 if(post.language === state.selectedLanguage) {
                     commit('ADDMOREPOSTTOPAGINATEDPOSTS', post)
                 }
@@ -261,6 +279,10 @@ const getPostBySlug = async ({ commit }, payload) => {
             let post = doc.data()
             post.uid = doc.id
             post.imageUrl = ''
+            if(post.imageName) {
+                const baseImageUri = `https://firebasestorage.googleapis.com/v0/b/kids-in-oslo.appspot.com/o/posts%2F${post.uid}%2F`
+                post.imageUrl = `${baseImageUri}${post.imageName}?alt=media`
+            }
             commit('SETSELECTEDPOST', post)
         })
     }).catch(err => {

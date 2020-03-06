@@ -51,15 +51,13 @@
     </div>
 </template>
 <script>
-import * as firebase from 'firebase/app'
-import 'firebase/storage'
 import { mapState, mapActions } from 'vuex'
 export default {
     name: "PostView",
     data() {
         return {
             imageUrl: "",
-            hasImageUrl: true
+            hasImageUrl: false
         }
     },
     props: {
@@ -70,38 +68,6 @@ export default {
     },
     methods: {
         ...mapActions('Posts', ['setSelectedPost', 'getPostGeolocation']),
-        getUrl() {
-            let thumbImage = this.post.imageName.replace('.jpg', '@s_400.jpg')
-            if(thumbImage == this.post.imageName) {
-                thumbImage = this.post.imageName.replace('.JPG', '@s_400.JPG')
-            }
-            const fileRef = firebase.storage().ref().child(`posts/${this.post.uid}/${thumbImage}`)
-
-            fileRef.getDownloadURL().then(url => {
-                this.imageUrl = url
-                this.post.imageUrlThumb = url
-            })
-            .catch(error => {
-                switch (error.code) {
-                    case 'storage/object-not-found':
-                    break;
-
-                    case 'storage/unauthorized':
-                    break;
-
-                    case 'storage/canceled':
-                    break;
-
-                    case 'storage/unknown':
-                    break;
-                    default:
-                        this.post.imageUrl = ""
-                        this.hasImageUrl = false
-                        break;
-                }
-
-            })
-        },
         details() {
             this.setSelectedPost(this.post)
             if(!this.post.lat || ! this.post.lng) {
@@ -120,9 +86,7 @@ export default {
             handler: function(value) {
                 if(value) {
                     if(value.imageName !== null) {
-                        if(value.imageUrlThumb === '')
-                            this.getUrl()
-                            // this.hasImageUrl = false
+                        this.hasImageUrl = true
                     } else {
                         this.imageUrl = ""
                         this.hasImageUrl = false

@@ -107,7 +107,7 @@ export default {
             this.post.category = this.category
             if(this.photo){
                 this.photo.info.name.replace('.JPG', '.jpg')
-                this.post.imageName = this.photo.info.name
+                this.post.imageName = this.photo.info.name.replace(' ', '_')
                 this.post.image = this.photo
             }
             // console.log(this.photo)

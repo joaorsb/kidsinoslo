@@ -40,7 +40,7 @@
 </template>
 
 <script>
-  import { mapState, mapActions, mapGetters } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
   export default {
     name: 'PostsList',
      data: () => ({
@@ -54,7 +54,6 @@
     },
     computed: {
       ...mapState('Posts', ['postsList', 'paginatedPosts', 'loadingPosts']),
-      ...mapGetters('Posts', ['filteredPosts']),
       ...mapState('Categories', ['selectedCategory']),
     },
   }

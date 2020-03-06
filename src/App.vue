@@ -99,9 +99,11 @@
 
           <v-row class="d-flex">
             <v-col cols="12" >
-              <carousel-view 
-                v-if="this.paginatedPosts.length > 0 && this.$router.history.current.path === '/'">
-              </carousel-view>
+              <keep-alive>
+                <carousel-view 
+                  v-if="this.paginatedPosts.length > 0 && this.$router.history.current.path === '/'">
+                </carousel-view>
+              </keep-alive>
             </v-col>
             <v-col  class="hidden-sm-and-down" md="3" >
               <v-list>

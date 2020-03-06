@@ -290,6 +290,8 @@ export default {
         updateImage(event) {
             event.preventDefault()
             if(this.photo) {
+                const newName = this.photo.info.name.replace(' ', '_')
+                this.photo.info.name = newName
                 this.updatePostImage(this.photo)
             }
             this.dialogImage = false

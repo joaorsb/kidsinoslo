@@ -60,8 +60,6 @@
     </article>
 </template>
 <script>
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
 import { mapState, mapActions } from 'vuex'
 export default {
     name: "PostDetail",
@@ -78,9 +76,6 @@ export default {
         if(this.selectedPost === null){
             this.getPostBySlug(this.$route.params.slug)
         } else {
-            if(this.selectedPost.imageUrl === '') {
-                this.getUrl()
-            }
             this.position.lat = this.selectedPost.lat
             this.position.lng = this.selectedPost.lng
         }
@@ -89,29 +84,6 @@ export default {
     },
     methods: {
         ...mapActions('Posts',['setSelectedPost', 'getPostBySlug', 'getPostGeolocation']),
-        getUrl() {
-            const fileRef = firebase.storage().ref().child('posts/' + this.selectedPost.uid + "/" + this.selectedPost.imageName)
-            fileRef.getDownloadURL().then(url => {
-                this.imageUrl = url
-                this.selectedPost.imageUrl = url
-            })
-            .catch(error => {
-                switch (error.code) {
-                    case 'storage/object-not-found':
-                    break;
-
-                    case 'storage/unauthorized':
-                    break;
-
-                    case 'storage/canceled':
-                    break;
-
-                    case 'storage/unknown':
-                    break;
-                }
-
-            })
-        },
         back() {
             this.$router.back()
         }
@@ -132,9 +104,6 @@ export default {
                 this.getPostGeolocation()
                 this.position.lat = this.selectedPost.lat
                 this.position.lng = this.selectedPost.lng
-                if(value.imageName !== null) {
-                    this.getUrl()
-                }
             }
         }
     }
