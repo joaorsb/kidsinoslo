@@ -57,8 +57,22 @@
                 </ckeditor>
             </v-col>
         </v-row>
-        <v-file-input outlined show-size accept="image/*" label="Photo" v-model="photo"></v-file-input>
-
+        <!-- <v-file-input outlined show-size accept="image/*" 
+        label="Photo" v-model="photo"
+        >
+        </v-file-input> -->
+        <image-uploader
+            :quality="0.9"
+            :autoRotate=true
+            outputFormat="verbose"
+            :preview=true
+            :className="['fileinput', { 'fileinput--loaded' : hasImage }]"
+            :capture="false"
+            accept="image/*"
+            doNotResize="['gif', 'svg']"
+            @input="setImage"
+        >
+        </image-uploader>
 
         <v-btn class="mr-4 float-right" :disabled=" ! showSubmit"  color="primary" @click="submit">submit</v-btn>
 
@@ -73,11 +87,18 @@ export default {
     data() {
         return {
             category: '',
-            photo: null
+            photo: null,
+            hasImage: false
         }
     },
     methods: {
         ...mapActions('Posts', ['createPost', 'addNewPostToPaginatedList']),
+        setImage(file) {
+            if(file){
+                this.hasImage = true
+                this.photo = file
+            }
+        },
         submit(event){
             event.preventDefault()
             this.post.owner = this.loggedUser.id
@@ -85,13 +106,14 @@ export default {
             this.post.slug = slugfy(this.post.title)
             this.post.category = this.category
             if(this.photo){
-                this.photo.name.replace('.JPG', '.jpg')
-                this.post.imageName = this.photo.name
+                this.photo.info.name.replace('.JPG', '.jpg')
+                this.post.imageName = this.photo.info.name
                 this.post.image = this.photo
             }
             // console.log(this.photo)
             this.createPost(this.post)
             this.$router.push('/')
+            this.hasImage = false
         }
     },
     computed: {

@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-// import { initializeApp, auth, firestore, storage } from 'firebase'
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
@@ -13,6 +12,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import VueCkeditor from 'vue-ckeditor5'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import VueDisqus from 'vue-disqus'
+import ImageUploader from 'vue-image-upload-resize'
 
 
 Vue.config.productionTip = false
@@ -37,6 +37,7 @@ const options = {
 
 Vue.use(VueCkeditor.plugin, options)
 Vue.use(VueDisqus)
+Vue.use(ImageUploader)
 
 Vue.use(VueGoogleMaps, {
   load: {

@@ -144,11 +144,11 @@
                 </v-dialog>
                 <v-dialog v-model="dialogImage" max-width="800">
                     <v-card>
-                        <v-img
+                        <!-- <v-img
                         :src="imageUrl"
                         height="400"
                         >
-                        </v-img>
+                        </v-img> -->
                         <v-card-title v-text="this.selectedPost.title"></v-card-title>
                         <v-container>
                             <v-row>
@@ -158,9 +158,31 @@
                                         lazy-validation
                                         enctype="multipart/form-data"
                                     >
-                                        <v-file-input outlined show-size accept="image/*" 
+                                        <!-- <v-file-input outlined show-size accept="image/*" 
                                             label="Photo" v-model="photo">
-                                        </v-file-input>
+                                        </v-file-input> -->
+                                         <image-uploader
+                                            :quality="0.9"
+                                            :autoRotate=true
+                                            outputFormat="verbose"
+                                            :preview=true
+                                            :className="['fileinput', { 'fileinput--loaded' : hasImage }]"
+                                            :capture="false"
+                                            accept="image/*"
+                                            doNotResize="['gif', 'svg']"
+                                            @input="setImage"
+                                        >
+                                            <label for="fileInput" slot="upload-label">
+                                                <figure>
+                                                    <v-img
+                                                        :src="imageUrl"
+                                                        height="300"
+                                                    >
+                                                    </v-img>
+                                                </figure>
+                                                <span class="upload-caption">{{ hasImage ? 'Replace' : 'Upload' }}</span>
+                                            </label>
+                                        </image-uploader>
                                     </v-form>
                                 </v-col>
                             </v-row>
@@ -190,8 +212,7 @@
         </v-snackbar>
     </div>
 </template>
-<script>import * as firebase from 'firebase/app'
-import 'firebase/firestore'
+<script>
 import { mapState, mapActions } from 'vuex'
 import { slugfy } from '@/helpers/slugfy'
 export default {
@@ -207,6 +228,7 @@ export default {
             snackbar: false,
             snackText: "",
             timeout: 3000,
+            hasImage: false
         }
     },
     computed: {
@@ -245,45 +267,36 @@ export default {
         openImageDialog(index){
             const post = this.postsList[index]
             this.setSelectedPost(post)
-            const fileRef = firebase.storage().ref().child('posts/' + this.selectedPost.uid + "/" + this.selectedPost.imageName)
-            fileRef.getDownloadURL().then(url => {
-                this.imageUrl = url
-            })
-            .catch(error => {
-                switch (error.code) {
-                    case 'storage/object-not-found':
-                        this.snackbar = true
-                        this.snackText = "Photo is missing"
-                        break;
-
-                    case 'storage/unauthorized':
-                        this.snackbar = true
-                        this.snackText = "Not authorized"
-                        break;
-
-                    case 'storage/canceled':
-                        this.snackbar = true
-                        this.snackText = "Account problems"
-                        break;
-
-                    case 'storage/unknown':
-                        this.snackbar = true
-                        this.snackText = "Unknown error"
-                        break;
+            let baseImageUri = `https://firebasestorage.googleapis.com/v0/b/kids-in-oslo.appspot.com/o/posts%2F${post.uid}%2F`
+            if(post.imageName) {
+                this.hasImage = true
+                let thumbImage = post.imageName.replace('.jpg', '%40s_400.jpg?alt=media')
+                if(thumbImage == post.imageName) {
+                    thumbImage = post.imageName.replace('.JPG', '%40s_400.JPG?alt=media')
                 }
-            })
+                this.imageUrl = `${baseImageUri}${thumbImage}`
+            } else {
+                this.snackbar = true
+                this.snackText = "Photo is missing"
+            }
             this.dialogImage = true
         },
-        updateImage(event){
+        setImage(file) {
+            if(file){
+                this.hasImage = true
+                this.photo = file
+            }
+        },
+        updateImage(event) {
             event.preventDefault()
-            if(this.photo){
-                this.photo.name.replace('.JPG', '.jpg')
+            if(this.photo) {
                 this.updatePostImage(this.photo)
             }
             this.dialogImage = false
             this.snackbar = true
             this.snackText = "Photo Uploaded"
             this.photo = null
+            this.hasImage = false
         },
         selectAndDeletePost(index) {
             const post = this.postsList[index]

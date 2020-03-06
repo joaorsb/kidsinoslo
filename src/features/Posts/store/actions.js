@@ -131,7 +131,7 @@ const createPost = async ({commit}, payload) => {
         delete payload.image
     }
     try{
-        var { data } = await axios.post(
+        const { data } = await axios.post(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${payload.address}+Oslo&key=AIzaSyADaD5ZdjzHBTyNT4s5CkOe1B8KAk5pthw`
         )
         if(data.error_message) {
@@ -149,8 +149,9 @@ const createPost = async ({commit}, payload) => {
         commit('ADDNEWPOSTTOPAGINATEDPOSTS', payload)
         commit('SETCURRENTUID', postRef.id)
         if(image) {
-            var storageRef = firebase.storage().ref().child('posts/' + payload.uid + "/" + image.name)
-            storageRef.put(image) 
+            const storageRef = firebase.storage().ref().child(`posts/${payload.uid}/${image.info.name}`)
+            storageRef.putString(image.dataUrl, 'data_url')
+            // storageRef.put(image) 
         }
     }).catch(error => {
         commit('SETERRORMESSAGE', error)
@@ -160,26 +161,26 @@ const createPost = async ({commit}, payload) => {
 
 const updatePostImage = async ({commit, state}, payload) => {
     if(payload) {
-        var storageRef = firebase.storage().ref().child('posts/' + state.selectedPost.uid + "/" + payload.name)
-        storageRef.put(payload).then(() => {
+        const storageRef = firebase.storage().ref().child(`posts/${state.selectedPost.uid}/${payload.info.name}`)
+        storageRef.putString(payload.dataUrl, 'data_url').then(() => {
             const postRef = firebase.firestore().collection('posts').doc(state.selectedPost.uid)
             postRef.update({
-                imageName: payload.name
+                imageName: payload.info.name
             })
             .then(() => {
                 commit('REPLACEPOSTFROMLIST', state.selectedPost)
             })
-            .catch(function(err) {
-                alert(err)
+            .catch(function(error) {
+                commit('SETERRORMESSAGE', error)
             })
         }).catch(error => {
-            alert(error)
+            commit('SETERRORMESSAGE', error)
         })
     }
 }
 
 const deletePostImage = async ({ state }) => {
-    var storageRef = firebase.storage().ref().child('posts/' + state.selectedPost.uid + "/" + state.selectedPost.name)
+    const storageRef = firebase.storage().ref().child(`posts/${state.selectedPost.uid}/${state.selectedPost.name}`)
     storageRef.delete() 
 }
 
@@ -213,6 +214,8 @@ const deletePost = async ({commit, state}) => {
                             .doc(state.selectedPost.uid)
     await postRef.delete()
     .then(() => {
+        const storageRef = firebase.storage().ref().child(`posts/${state.selectedPost.uid}/${state.selectedPost.name}`)
+        storageRef.delete() 
         commit('REMOVEPOSTFROMPAGINATEDPOSTS', state.selectedPost.slug)
         commit('SETSELECTEDPOST', null)
     })    
@@ -268,7 +271,7 @@ const getPostBySlug = async ({ commit }, payload) => {
 
 const getPostGeolocation = async ({ commit, state }) => {
     try{
-        var { data } = await axios.post(
+        const { data } = await axios.post(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${state.selectedPost.address}+Oslo&key=AIzaSyADaD5ZdjzHBTyNT4s5CkOe1B8KAk5pthw`
         );
         if(data.error_message) {

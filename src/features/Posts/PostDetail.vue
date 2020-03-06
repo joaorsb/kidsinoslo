@@ -1,13 +1,17 @@
 <template>
     <article v-if="this.selectedPost">
-        <v-container>
-            <v-row>
-                <v-col align-self="end">
-                    <v-btn text @click="back()" class="float-right"><v-icon>mdi-arrow-left</v-icon>Back</v-btn>
-                </v-col>
-            </v-row>
-        </v-container>
         <v-card>
+             <v-btn
+              absolute
+              dark
+              fab
+              top
+              right
+              color="blue-grey darken-4"
+              @click="back()"
+            >
+              <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>
             <v-img
             :src="selectedPost.imageUrl"
             height="400"
