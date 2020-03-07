@@ -218,6 +218,7 @@ const editPost = async ({commit}, payload) => {
         category: payload.category,
         language: payload.language,
         slug: payload.slug,
+        siteUrl: payload.siteUrl
     })
     .then(() => {
         commit('REPLACEPOSTFROMLIST', payload)

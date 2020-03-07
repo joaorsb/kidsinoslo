@@ -27,6 +27,12 @@
         label="Neighborhood"
         required
         ></v-text-field>
+
+        <v-text-field
+        v-model="post.siteUrl"
+        label="Site Url"
+        required
+        ></v-text-field>
         
         <v-select
             :items="categoriesList"

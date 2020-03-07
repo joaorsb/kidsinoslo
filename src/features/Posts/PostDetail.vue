@@ -43,6 +43,13 @@
                         <v-list-item-title v-text="this.selectedPost.neighborhood"></v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item v-if="this.selectedPost.siteUrl">
+                    <v-list-item-content>
+                        <v-list-item-title>
+                            <a target="_blank" :href="this.selectedPost.siteUrl">Klikk her for mer info</a>
+                        </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
             </v-list>
         </section>
         <div v-if="this.selectedPost">

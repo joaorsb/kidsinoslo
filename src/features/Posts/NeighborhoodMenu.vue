@@ -1,12 +1,12 @@
 <template>
-    <div v-if="this.neighborhoodList.length > 0">
+    <div>
         <v-divider></v-divider>
         <v-list>
             <v-list-item-content class="mx-2">
                 <v-list-item-title>Bydel</v-list-item-title>
             </v-list-item-content>
             <v-list-item
-                v-for="(neiborhood, index) in neighborhoodList"
+                v-for="(neiborhood, index) in sortedNeighborhood"
                 :key="index"
                 @click="filterNeighborhood(index)"
             >
@@ -16,11 +16,12 @@
     </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
     name: "NeighborhoodMenu",
     computed: {
-        ...mapState('Posts', ['neighborhoodList', 'selectedNeighborhood']),
+        ...mapState('Posts', ['selectedNeighborhood']),
+        ...mapGetters('Posts', ['sortedNeighborhood'])
     },
     methods: {
         ...mapActions('Posts', [
@@ -34,7 +35,8 @@ export default {
             this.setPaginationPage(1)
             this.clearPaginatedPosts()
             this.setSelectedCategory(null)
-            const neighborhood = this.neighborhoodList[index]
+            const neighborhood = this.sortedNeighborhood[index]
+            // console.log(neighborhood)
             this.setSelectedNeighborhood(neighborhood)
             this.getPaginatedPosts()
             if(this.$router.history.current.path !== '/'){

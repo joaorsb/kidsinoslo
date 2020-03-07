@@ -14,7 +14,8 @@ export default {
         language: 'no',
         slug: undefined,
         createdAt: new Date(),
-        imageName: null
+        imageName: null,
+        siteUrl: null
     },
     postsList: [],
     errorMessage: '',

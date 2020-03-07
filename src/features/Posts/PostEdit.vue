@@ -93,6 +93,13 @@
                                             required
                                         ></v-text-field>
                                     </v-col>
+                                    <v-col cols="12" sm="6" md="4">
+                                         <v-text-field
+                                            v-model="selectedPost.siteUrl"
+                                            label="Site Url"
+                                            required
+                                        ></v-text-field>
+                                    </v-col>
                                     <v-col cols="12" sm="6" md="6">
                                         <v-select
                                             :items="categoriesList"

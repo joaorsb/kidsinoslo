@@ -20,7 +20,15 @@ const randomPosts = (state) => {
     return randomPosts
 }
 
+const sortedNeighborhood = (state) => {
+    const sortedNeighborhood = new Set()
+    state.neighborhoodList.sort((a, b) => a.localeCompare(b))
+    state.neighborhoodList.map(neighborhood => sortedNeighborhood.add(neighborhood))
+    return [...sortedNeighborhood]
+}
+
 
 export default {
-    randomPosts
+    randomPosts,
+    sortedNeighborhood
 }
