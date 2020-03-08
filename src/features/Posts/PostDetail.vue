@@ -14,7 +14,6 @@
             </v-btn>
             <v-img
             :src="selectedPost.imageUrl"
-            height="400"
             >
                 <template v-slot:placeholder>
                     <v-row
