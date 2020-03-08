@@ -15,9 +15,10 @@ export default {
         slug: undefined,
         createdAt: new Date(),
         imageName: null,
-        siteUrl: null
+        siteUrl: null,
     },
     postsList: [],
+    snackText: '',
     errorMessage: '',
     selectedPost: null,
     languages: [
@@ -34,5 +35,6 @@ export default {
     page: 1,
     paginationSize: 25,
     selectedLanguage: 'no',
-    loadingPosts: false
+    loadingPosts: false,
+    navBarMenu: false
 }

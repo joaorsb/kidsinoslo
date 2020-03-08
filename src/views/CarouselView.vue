@@ -31,14 +31,19 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
     name: "CarouselView",
     methods: {
-        ...mapActions('Posts', ['setSelectedPost']),
+        ...mapActions('Posts', ['setSelectedPost', 'getPostGeolocation']),
         selectPost(index) {
-            this.setSelectedPost(this.randomPosts[index])
-            this.$router.push({name: "post-detail", params: {slug: this.selectedPost.slug }})
+            const postsList = [...this.randomPosts]
+            const post = postsList[index]
+            this.setSelectedPost(post)
+            if(! post.lat || ! post.lng) {
+                this.getPostGeolocation()
+            }
+            this.$router.push({name: "post-detail", params: {slug: post.slug }}).catch(() => {})
         }
     },
     computed: {
-        ...mapState('Posts', ['paginatedPosts', 'selectedPost', 'selectedNeighborhood']),
+        ...mapState('Posts', ['paginatedPosts', 'selectedPost']),
         ...mapState('Categories', ['selectedCategory']),
         ...mapGetters('Posts', ['randomPosts'])
     }

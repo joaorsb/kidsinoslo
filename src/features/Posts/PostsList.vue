@@ -22,11 +22,24 @@
                     color="primary"
                     @click="loadMorePosts()"
                     class="my-4 float-right"
-                    v-show="this.paginatedPosts.length > 25"
+                    v-show="this.paginatedPosts.length > 24"
                   >
                     Load more
                     <v-icon>mdi-autorenew</v-icon>
                   </v-btn>
+                  <v-snackbar
+                      v-model="hasSnackBar"
+                      :timeout="timeout"
+                      >
+                      {{ snackText }}
+                      <v-btn
+                          color="blue"
+                          text
+                          @click="closeSnack"
+                      >
+                          Close
+                      </v-btn>
+                  </v-snackbar>
           </v-container>
           <v-container fluid  v-else>
             <v-row dense>
@@ -45,15 +58,22 @@
     name: 'PostsList',
      data: () => ({
       transition: 'scale-transition',
+      timeout: 3000,
+      hasSnackBar: false,
     }),
     methods: {
-        ...mapActions('Posts', ['getPaginatedPosts']),
+        ...mapActions('Posts', ['getPaginatedPosts', 'closeSnack']),
         loadMorePosts(){
+          this.hasSnackBar = true
           this.getPaginatedPosts()
         }
     },
     computed: {
-      ...mapState('Posts', ['postsList', 'paginatedPosts', 'loadingPosts']),
+      ...mapState('Posts', [
+          'postsList', 
+          'paginatedPosts', 'loadingPosts', 
+          'snackText', 'hasSnack'
+      ]),
       ...mapState('Categories', ['selectedCategory']),
     },
   }

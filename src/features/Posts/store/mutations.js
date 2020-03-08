@@ -72,6 +72,19 @@ const SETLOADINGPOSTS = (state, payload) => {
     state.loadingPosts = payload
 }
 
+const SET_SNACK_TEXT = (state, payload) => {
+    state.hasSnack = true
+    state.snackText = payload
+}
+
+const CLOSE_SNACK_TEXT = (state) => {
+    state.snackText = ''
+}
+
+const SET_NAV_BAR_MENU = (state) => {
+    state.navBarMenu = ! state.navBarMenu
+}
+
 export default {
     SETSELECTEDPOST,
     SETPOSTSLIST,
@@ -89,5 +102,8 @@ export default {
     SETLANGUAGE,
     SETLOADINGPOSTS,
     REMOVEPOSTFROMPAGINATEDPOSTS,
-    ADDNEWPOSTTOPAGINATEDPOSTS
+    ADDNEWPOSTTOPAGINATEDPOSTS,
+    SET_SNACK_TEXT,
+    CLOSE_SNACK_TEXT,
+    SET_NAV_BAR_MENU
 }

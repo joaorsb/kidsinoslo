@@ -56,7 +56,6 @@ const searchPosts = async ({commit, state}, payload) => {
 }
 
 const getPaginatedPosts = async ({commit, state, rootState}) => {
-    commit('SETLOADINGPOSTS', true)
     let postsRef = null
     if(state.selectedNeighborhood){
         postsRef = firebase.firestore().collection('posts')
@@ -69,6 +68,7 @@ const getPaginatedPosts = async ({commit, state, rootState}) => {
     }
 
     if(state.page < 2){
+        commit('SETLOADINGPOSTS', true)
         await postsRef.orderBy('createdAt', "desc")
         .limit(state.paginationSize).get().then(snapshot => {
             if(snapshot.empty){
@@ -103,13 +103,16 @@ const getPaginatedPosts = async ({commit, state, rootState}) => {
             commit('SETERRORMESSAGE', err)
         })
     } else {
+        commit('SET_SNACK_TEXT', 'Loading...')
         let lastVisible = state.paginatedPosts[state.paginatedPosts.length - 1]
         await postsRef.orderBy('createdAt', "desc").limit(state.paginationSize)
         .startAfter(lastVisible.createdAt)
         .get().then(snapshot => {
             if(snapshot.empty){
+                commit('SET_SNACK_TEXT', 'No more posts to load')
                 return
             } 
+           
             snapshot.forEach(doc => {
                 let post = doc.data()
                 post.uid = doc.id
@@ -319,6 +322,14 @@ const getPostGeolocation = async ({ commit, state }) => {
     }
 }
 
+const closeSnack = ({ commit }) => {
+    commit('CLOSE_SNACK_TEXT')
+}
+
+const setNavBarMenu = ({ commit }) => {
+    commit('SET_NAV_BAR_MENU')
+}
+
 export default {
     getPosts,
     createPost,
@@ -336,5 +347,7 @@ export default {
     setLanguage,
     addNewPostToPaginatedList,
     getPostBySlug,
-    getPostGeolocation
+    getPostGeolocation,
+    closeSnack,
+    setNavBarMenu
 }

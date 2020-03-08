@@ -191,6 +191,9 @@
         setDarkModeOnLocalStorage(value) {
           if (localStorage.setItem('darkMode', value)) return true
           return false
+        },
+        openMenu() {
+          window.scrollTo(0,0)
         }
     },
     created() {
@@ -210,7 +213,12 @@
     computed: {
       ...mapGetters('Accounts', ['loggedUser', 'authError', 'isAdmin']),
       ...mapState('Categories', ['categoriesList']),
-      ...mapState('Posts', ['postsList', 'paginatedPosts', 'languages', 'selectedLanguage']),
+      ...mapState('Posts', [
+        'postsList', 
+        'paginatedPosts', 
+        'languages', 
+        'selectedLanguage',
+      ]),
       menuItems() {
         let menuItems = [
           // { icon: "mdi-account", title: "Register", url: '/register'},
