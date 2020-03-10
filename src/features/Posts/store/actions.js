@@ -221,13 +221,14 @@ const editPost = async ({commit}, payload) => {
         category: payload.category,
         language: payload.language,
         slug: payload.slug,
-        siteUrl: payload.siteUrl
+        siteUrl: payload.siteUrl,
+        availableforCarousel: false,
     })
     .then(() => {
         commit('REPLACEPOSTFROMLIST', payload)
     })
     .catch(function(err) {
-        alert(err)
+        commit('SETERRORMESSAGE', err)
     })
 }
 

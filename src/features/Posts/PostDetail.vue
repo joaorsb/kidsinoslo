@@ -51,7 +51,7 @@
                 </v-list-item>
             </v-list>
         </section>
-        <div v-if="this.selectedPost">
+        <div v-if="this.selectedPost && hasMap">
             <GmapMap :center="this.position" 
                 :zoom="17" class="mt-3"
                 style="width: 100%; height: 400px" 
@@ -66,6 +66,7 @@
     </article>
 </template>
 <script>
+import axios from 'axios'
 import { mapState, mapActions } from 'vuex'
 export default {
     name: "PostDetail",
@@ -75,23 +76,44 @@ export default {
             position: {
                 lat: 0,
                 lng: 0
-            }
+            },
+            hasMap: false
         }
     },
     beforeMount() {
         if(this.selectedPost === null){
             this.getPostBySlug(this.$route.params.slug)
         } else {
-            this.position.lat = this.selectedPost.lat
-            this.position.lng = this.selectedPost.lng
+            this.getPostGeolocation()
         }
     },
     mounted() {
     },
     methods: {
-        ...mapActions('Posts',['setSelectedPost', 'getPostBySlug', 'getPostGeolocation']),
+        ...mapActions('Posts',['setSelectedPost', 'getPostBySlug', 'editPost']),
         back() {
             this.$router.back()
+        },
+        async getPostGeolocation() {
+            try{
+                const { data } = await axios.post(
+                `https://maps.googleapis.com/maps/api/geocode/json?address=${this.selectedPost.address}+Oslo&key=AIzaSyADaD5ZdjzHBTyNT4s5CkOe1B8KAk5pthw`
+                )
+                if(data.error_message) {
+                    console.log(data.error_message)
+                } else {
+                    this.hasMap = true
+                    this.position.lat = data.results[0].geometry.location.lat
+                    this.position.lng = data.results[0].geometry.location.lng
+                    if( ! this.selectedPost.lat) {
+                        this.selectedPost.lat = this.position.lat
+                        this.selectedPost.lng = this.position.lng
+                        this.editPost(this.selectedPost)
+                    }
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
         }
     },
     computed: {
@@ -108,8 +130,9 @@ export default {
         selectedPost(value) {
             if(value){
                 this.getPostGeolocation()
-                this.position.lat = this.selectedPost.lat
-                this.position.lng = this.selectedPost.lng
+                // console.log(this.selectedPost.lat)
+                // this.position.lat = this.selectedPost.lat
+                // this.position.lng = this.selectedPost.lng
             }
         }
     }

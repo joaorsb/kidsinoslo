@@ -51,6 +51,11 @@
             label="Choose Language"
             outlined
         ></v-select>
+
+        <v-switch
+            v-model="post.availableforCarousel"
+            label="Should be at Carousel?"
+        ></v-switch>
         
         <v-row>
             <v-col cols="12" class="editor-text">

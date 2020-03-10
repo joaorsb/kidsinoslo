@@ -120,6 +120,12 @@
                                             outlined
                                         ></v-select>
                                     </v-col>
+                                    <v-col cols="12" sm="6" md="6">
+                                        <v-switch
+                                            v-model="selectedPost.availableforCarousel"
+                                            label="Should be at Carousel?"
+                                        ></v-switch>
+                                    </v-col>
                                     <v-col cols="12">
                                         <v-row>
                                             <v-col cols="3">

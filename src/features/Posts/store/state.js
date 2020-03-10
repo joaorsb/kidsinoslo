@@ -16,6 +16,7 @@ export default {
         createdAt: new Date(),
         imageName: null,
         siteUrl: null,
+        availableforCarousel: false,
     },
     postsList: [],
     snackText: '',
