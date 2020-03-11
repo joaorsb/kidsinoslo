@@ -13,6 +13,7 @@ import VueCkeditor from 'vue-ckeditor5'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import VueDisqus from 'vue-disqus'
 import ImageUploader from 'vue-image-upload-resize'
+import VueLuxon from "vue-luxon"
 
 
 Vue.config.productionTip = false
@@ -39,6 +40,7 @@ const options = {
 Vue.use(VueCkeditor.plugin, options)
 Vue.use(VueDisqus)
 Vue.use(ImageUploader)
+Vue.use(VueLuxon)
 
 Vue.use(VueGoogleMaps, {
   load: {

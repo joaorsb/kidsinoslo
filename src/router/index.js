@@ -9,6 +9,8 @@ import PostEdit from '@/features/Posts/PostEdit'
 import PostDetail from '@/features/Posts/PostDetail'
 import CategoryAdd from '@/features/Categories/CategoryAdd'
 import CategoriesList from '@/features/Categories/CategoriesList'
+import MessagesList from '@/features/Messages/MessagesList'
+import MessageAdd from '@/features/Messages/MessageAdd'
 import AuthGuard from './auth-guard'
 
 Vue.use(VueRouter)
@@ -67,6 +69,17 @@ const routes = [
     name: 'categories-add',
     component: CategoryAdd,
     beforeEnter: AuthGuard
+  },
+  {
+    path: '/admin/messages',
+    name: 'messages',
+    component: MessagesList,
+    beforeEnter: AuthGuard
+  },
+  {
+    path: '/messages/add',
+    name: 'messages-add',
+    component: MessageAdd,
   }
 ]
 

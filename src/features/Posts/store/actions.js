@@ -331,6 +331,10 @@ const setNavBarMenu = ({ commit }) => {
     commit('SET_NAV_BAR_MENU')
 }
 
+const setErrorMessage = ({commit}, payload) => {
+    commit('SETERRORMESSAGE', payload)
+}
+
 export default {
     getPosts,
     createPost,
@@ -350,5 +354,6 @@ export default {
     getPostBySlug,
     getPostGeolocation,
     closeSnack,
-    setNavBarMenu
+    setNavBarMenu,
+    setErrorMessage
 }

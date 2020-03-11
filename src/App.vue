@@ -1,47 +1,10 @@
 <template>
   <v-app>
-    <v-app-bar app elevate-on-scroll>
-        <v-app-bar-nav-icon @click.native.stop="navBarMenu = ! navBarMenu" 
-          class="hidden-md-and-up">
-        </v-app-bar-nav-icon>
-        <v-toolbar-title class="headline text-uppercase">
-          <span  class="font-weight-medium"> Kids in Oslo </span>
-          <span class="font-weight-light"></span>
-        </v-toolbar-title>
-        <div class="flex-grow-1"></div>
-        <v-toolbar-items>
-          <v-switch class="my-5"
-            v-model="darkMode">
-          </v-switch>
-          <v-icon>mdi-moon-waxing-crescent</v-icon>
-        </v-toolbar-items>
-        <v-toolbar-items class="hidden-sm-and-down" >
-          <v-btn v-for="(language, index) in filteredLanguages" v-bind:key="index"
-            text
-            small
-            active-class="v-btn--active"
-            @click="setSelectedLanguague(language.value)">
-            <span class="mr-2">{{language.name}}</span>
-          </v-btn>
-        </v-toolbar-items>
-        <v-toolbar-items class="hidden-sm-and-down">
-          <v-btn v-for="item in menuItems" v-bind:key="item.title"
-            text
-            :to=item.url
-            small>
-            <v-icon left>{{item.icon}}</v-icon>
-            <span class="mr-2">{{item.title}}</span>
-          </v-btn>
-        </v-toolbar-items>
-    </v-app-bar>
-
-    <v-content >
-      <v-card v-show="navBarMenu" height="500" width="100%" class="mx-auto">
-        <v-navigation-drawer
+    <v-navigation-drawer
             v-model="navBarMenu"
-            width="80%"
-            absolute
-            temporary
+            disable-resize-watcher
+            app
+            :clipped="true"
           >
             <v-divider></v-divider>
             
@@ -53,6 +16,14 @@
               >
                 <v-list-item-content>
                   <v-list-item-title>{{language.name}}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item
+                link
+                @click="contact()"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>Kontakt</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item
@@ -94,7 +65,51 @@
               </v-list>
             </div>
         </v-navigation-drawer>
-      </v-card>
+    <v-app-bar app elevate-on-scroll>
+        <v-app-bar-nav-icon @click.native.stop="navBarMenu = ! navBarMenu" 
+          class="hidden-md-and-up">
+        </v-app-bar-nav-icon>
+        <v-toolbar-title class="headline text-uppercase">
+          <span  class="font-weight-medium"> Kids in Oslo </span>
+          <span class="font-weight-light"></span>
+        </v-toolbar-title>
+        <div class="flex-grow-1"></div>
+        <v-toolbar-items>
+          <v-switch class="my-5"
+            v-model="darkMode">
+          </v-switch>
+          <v-icon>mdi-moon-waxing-crescent</v-icon>
+        </v-toolbar-items>
+        <v-toolbar-items class="hidden-sm-and-down" >
+          <v-btn v-for="(language, index) in filteredLanguages" v-bind:key="index"
+            text
+            small
+            active-class="v-btn--active"
+            @click="setSelectedLanguague(language.value)">
+            <span class="mr-2">{{language.name}}</span>
+          </v-btn>
+        </v-toolbar-items>
+        <v-toolbar-items class="hidden-sm-and-down" >
+          <v-btn 
+            text
+            small
+            active-class="v-btn--active"
+            @click="contact()">
+            <span class="mr-2">Kontakt</span>
+          </v-btn>
+        </v-toolbar-items>
+        <v-toolbar-items class="hidden-sm-and-down">
+          <v-btn v-for="item in menuItems" v-bind:key="item.title"
+            text
+            :to=item.url
+            small>
+            <v-icon left>{{item.icon}}</v-icon>
+            <span class="mr-2">{{item.title}}</span>
+          </v-btn>
+        </v-toolbar-items>
+    </v-app-bar>
+
+    <v-content >
       <v-container >
 
           <v-row class="d-flex">
@@ -194,6 +209,9 @@
         },
         openMenu() {
           window.scrollTo(0,0)
+        },
+        contact() {
+          this.$router.push('/messages/add')
         }
     },
     created() {
@@ -240,6 +258,7 @@
             { title: "Categories", url: '/admin/categories'},
             { title: "Posts", url: '/posts/edit'},
             { title: "Add Post", url: '/posts/add'},
+            { title: "Messages", url: '/admin/messages'},
           ]
         }
         return menuAdmin
