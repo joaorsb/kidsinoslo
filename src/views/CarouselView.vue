@@ -4,6 +4,7 @@
             cycle
             height="400"
             show-arrows-on-hover
+            hide-delimiters
         >
             <v-carousel-item
             v-for="(post, i) in randomPosts"
@@ -14,12 +15,21 @@
             @click="selectPost(i)"
             >
                 <v-row
-                class="fill-height"
-                align="center"
-                justify="center"
+                    class="fill-height hidden-sm-and-down"
+                    align="center"
+                    justify="center"
                 >
-                    <div class="display-2 font-weight-thin hidden-sm-and-down" >
+                    <div class="display-2 font-weight-thin" >
                         <span class="info-title" v-text="post.title"></span>
+                    </div>
+                </v-row>
+                <v-row
+                    class="fill-height hidden-md-and-up"
+                    align="end"
+                    justify="center"
+                >
+                    <div class="display-1 font-weight-thin " >
+                        <span class="info-title" v-text="post.neighborhood"></span>
                     </div>
                 </v-row>
             </v-carousel-item>

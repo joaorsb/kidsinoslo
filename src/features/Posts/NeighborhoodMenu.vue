@@ -3,15 +3,23 @@
         <v-divider></v-divider>
         <v-list>
             <v-list-item-content class="mx-2">
-                <v-list-item-title>Bydel</v-list-item-title>
+                <v-list-item-title>
+                    <v-btn text  @click="showMenu = !showMenu">
+                        Bydel
+                        <v-icon v-show=" ! showMenu">mdi-arrow-down</v-icon>
+                        <v-icon v-show="showMenu">mdi-arrow-up</v-icon>
+                    </v-btn>
+                </v-list-item-title>
             </v-list-item-content>
-            <v-list-item
-                v-for="(neiborhood, index) in sortedNeighborhood"
-                :key="index"
-                @click="filterNeighborhood(index)"
-            >
-                <v-list-item-title>{{ neiborhood }}</v-list-item-title>
-            </v-list-item>
+            <div v-show="showMenu">
+                <v-list-item
+                    v-for="(neiborhood, index) in sortedNeighborhood"
+                    :key="index"
+                    @click="filterNeighborhood(index)"
+                >
+                    <v-list-item-title>{{ neiborhood }}</v-list-item-title>
+                </v-list-item>
+            </div>
         </v-list>      
     </div>
 </template>
@@ -19,6 +27,11 @@
 import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
     name: "NeighborhoodMenu",
+    data() {
+        return {
+            showMenu: false,
+        }
+    },
     computed: {
         ...mapState('Posts', ['selectedNeighborhood']),
         ...mapGetters('Posts', ['sortedNeighborhood'])
