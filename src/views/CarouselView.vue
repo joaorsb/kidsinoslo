@@ -28,7 +28,7 @@
                     align="end"
                     justify="center"
                 >
-                    <div class="display-1 font-weight-thin " >
+                    <div class="display-1 font-weight-regular " >
                         <span class="info-title" v-text="post.neighborhood"></span>
                     </div>
                 </v-row>

@@ -7,7 +7,6 @@
             :clipped="true"
           >
             <v-divider></v-divider>
-            
             <v-list dense>
               <v-list-item
                 link
@@ -43,7 +42,14 @@
             <v-divider></v-divider>
             <v-list>
               <v-list-item @click="filterAll()">
-                  <v-list-item-title>Alle aktiviteter</v-list-item-title>
+                  <v-list-item-title>
+                    <span class="subtitle-1">Alle aktiviteter</span> 
+                  </v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="blog()">
+                  <v-list-item-title>
+                    <span class="subtitle-1">Blog</span> 
+                  </v-list-item-title>
               </v-list-item>
             </v-list>
             <categories-menu></categories-menu>
@@ -123,7 +129,14 @@
             <v-col  class="hidden-sm-and-down" md="3" >
               <v-list>
                   <v-list-item @click="filterAll()">
-                      <v-list-item-title>Alle aktiviteter</v-list-item-title>
+                    <v-list-item-title>
+                      <span class="title">Alle aktiviteter</span>
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="blog()">
+                    <v-list-item-title>
+                      <span class="title">Blog</span>
+                    </v-list-item-title>
                   </v-list-item>
               </v-list>
               <v-divider></v-divider>
@@ -132,7 +145,9 @@
               <v-divider></v-divider>
               <v-list v-if="this.loggedUser && this.isAdmin">
                   <v-list-item-content class="mx-2">
-                      <v-list-item-title>Admin actions</v-list-item-title>
+                      <v-list-item-title>
+                        <span class="subtitle-1 font-weight-medium">Admin actions</span>
+                      </v-list-item-title>
                   </v-list-item-content>
                  <v-list-item
                     link
@@ -176,7 +191,8 @@
         'getPaginatedPosts',
         'setPaginationPage',
         'clearPaginatedPosts',
-        'setLanguage'
+        'setLanguage',
+        'getNeighborhoods'
       ]),
       filterAll() {
             this.setPaginationPage(1)
@@ -212,14 +228,20 @@
         },
         contact() {
           this.$router.push('/messages/add')
+        },
+        blog() {
+          this.$router.push('/blog')
         }
     },
     created() {
-      if(this.categoriesList.length === 0) {
+      if (this.categoriesList.length === 0) {
         this.getCategories()
       }
-      if(this.paginatedPosts.length === 0) {
+      if (this.paginatedPosts.length === 0) {
         this.getPaginatedPosts()
+      }
+      if (this.neighborhoodList.length === 0) {
+        this.getNeighborhoods()
       }
     },
     beforeMount() {
@@ -236,6 +258,7 @@
         'paginatedPosts', 
         'languages', 
         'selectedLanguage',
+        'neighborhoodList'
       ]),
       menuItems() {
         let menuItems = [
@@ -259,6 +282,9 @@
             { title: "Posts", url: '/posts/edit'},
             { title: "Add Post", url: '/posts/add'},
             { title: "Messages", url: '/admin/messages'},
+            { title: "Neighborhoods", url: '/admin/neighborhoods'},
+            { title: "Blog", url: '/blog/edit'},
+            { title: "Add Story", url: '/blog/add'},
           ]
         }
         return menuAdmin

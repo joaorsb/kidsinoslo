@@ -245,7 +245,7 @@ export default {
         }
     },
     computed: {
-        ...mapState('Posts', ['selectedPost', 'languages', 'postsList']),
+        ...mapState('Posts', ['selectedPost', 'languages', 'postsList', 'neighborhoodList']),
         ...mapState('Categories', ['categoriesList']),
     },
     methods: {
@@ -272,6 +272,9 @@ export default {
             this.selectedPost.slug = slugfy(this.selectedPost.title)
             this.selectedPost.oldSlug = this.oldSlug
             this.editPost(this.selectedPost)
+            if( ! this.neighborhoodList.includes(this.selectedPost.neighborhood)) {
+                this.createNeighborhood({ name: this.selectedPost.neighborhood, lat: null, lng: null })
+            }
             this.setSelectedPost(null)
             this.dialogEdit = !this.dialogEdit
             this.snackbar = true

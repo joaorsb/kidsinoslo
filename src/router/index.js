@@ -4,9 +4,14 @@ import VueRouter from 'vue-router'
 import Login from '@/features/Accounts/Login'
 import Logout from '@/features/Accounts/Logout'
 import PostsList from '@/features/Posts/PostsList'
+import StoriesList from '@/features/Blog/StoriesList'
 import PostAdd from '@/features/Posts/PostAdd'
+import StoryAdd from '@/features/Blog/StoryAdd'
 import PostEdit from '@/features/Posts/PostEdit'
+import StoryEdit from '@/features/Blog/StoryEdit'
 import PostDetail from '@/features/Posts/PostDetail'
+import StoryDetail from '@/features/Blog/StoryDetail'
+import NeighborhoodList from '@/features/Posts/NeighborhoodList'
 import CategoryAdd from '@/features/Categories/CategoryAdd'
 import CategoriesList from '@/features/Categories/CategoriesList'
 import MessagesList from '@/features/Messages/MessagesList'
@@ -20,6 +25,11 @@ const routes = [
     path: '/',
     name: 'home',
     component: PostsList
+  },
+  {
+    path: '/blog',
+    name: 'blog',
+    component: StoriesList
   },
   // {
     // path: '/register',
@@ -77,9 +87,32 @@ const routes = [
     beforeEnter: AuthGuard
   },
   {
+    path: '/admin/neighborhoods',
+    name: 'neighborhoods',
+    component: NeighborhoodList,
+    beforeEnter: AuthGuard
+  },
+  {
     path: '/messages/add',
     name: 'messages-add',
     component: MessageAdd,
+  },
+  {
+    path: '/blog/add',
+    name: 'stories-add',
+    component: StoryAdd,
+    beforeEnter: AuthGuard
+  },
+  {
+    path: '/blog/edit',
+    name: 'stories-edit',
+    component: StoryEdit,
+    beforeEnter: AuthGuard
+  },
+  {
+    path: '/blog/:slug',
+    name: 'stories-detail',
+    component: StoryDetail
   }
 ]
 

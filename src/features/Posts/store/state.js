@@ -37,5 +37,10 @@ export default {
     paginationSize: 26,
     selectedLanguage: 'no',
     loadingPosts: false,
-    navBarMenu: false
+    navBarMenu: false,
+    newNeighborhood: {
+        name: null,
+        lat: null,
+        lng: null
+    },
 }

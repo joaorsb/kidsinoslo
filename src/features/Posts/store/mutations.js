@@ -42,10 +42,18 @@ const SETCURRENTUID = (state, payload) => {
     state.currentUid = payload
 }
 
-const ADDTONEIGHBORHOODLIST = (state, payload) => {
+const ADD_TO_NEIGHBORHOOD_LIST = (state, payload) => {
     if( ! state.neighborhoodList.includes(payload)){
         state.neighborhoodList.push(payload)
     }
+}
+
+const SET_NEIGHBORHOOD_LIST = (state, payload) => {
+    state.neighborhoodList = payload
+}
+
+const REMOVE_FROM_NEIGHBORHOOD_LIST = (state, payload) => {
+    state.neighborhoodList = state.neighborhoodList.filter(x => x !== payload)
 }
 
 const SETSELECTEDNEIGHBORHOOD = (state, payload) => {
@@ -91,7 +99,7 @@ export default {
     ADDPOSTTOLIST,
     SETERRORMESSAGE,
     SETCURRENTUID,
-    ADDTONEIGHBORHOODLIST,
+    ADD_TO_NEIGHBORHOOD_LIST,
     SETSELECTEDNEIGHBORHOOD,
     REMOVEPOSTFROMLIST,
     REPLACEPOSTFROMLIST,
@@ -105,5 +113,7 @@ export default {
     ADDNEWPOSTTOPAGINATEDPOSTS,
     SET_SNACK_TEXT,
     CLOSE_SNACK_TEXT,
-    SET_NAV_BAR_MENU
+    SET_NAV_BAR_MENU,
+    SET_NEIGHBORHOOD_LIST,
+    REMOVE_FROM_NEIGHBORHOOD_LIST,
 }

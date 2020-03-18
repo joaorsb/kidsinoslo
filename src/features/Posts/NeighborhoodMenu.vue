@@ -2,15 +2,15 @@
     <div>
         <v-divider></v-divider>
         <v-list>
-            <v-list-item-content class="mx-2">
+            <v-list-item  @click="showMenu = !showMenu">
                 <v-list-item-title>
-                    <v-btn text  @click="showMenu = !showMenu">
-                        Bydel
-                        <v-icon v-show=" ! showMenu">mdi-arrow-down</v-icon>
-                        <v-icon v-show="showMenu">mdi-arrow-up</v-icon>
-                    </v-btn>
+                    <span class="title">Strøk/Bydel</span>
+                    <v-icon v-show=" ! showMenu">mdi-arrow-down</v-icon>
+                    <v-icon v-show="showMenu">mdi-arrow-up</v-icon>
                 </v-list-item-title>
-            </v-list-item-content>
+            </v-list-item>
+        </v-list>
+        <v-list>
             <div v-show="showMenu">
                 <v-list-item
                     v-for="(neiborhood, index) in sortedNeighborhood"

@@ -103,7 +103,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions('Posts', ['createPost', 'addNewPostToPaginatedList']),
+        ...mapActions('Posts', ['createPost', 'addNewPostToPaginatedList', 'createNeighborhood']),
         setImage(file) {
             if(file){
                 this.hasImage = true
@@ -123,12 +123,15 @@ export default {
             }
             // console.log(this.photo)
             this.createPost(this.post)
+            if( ! this.neighborhoodList.includes(this.post.neighborhood)) {
+                this.createNeighborhood({ name: this.post.neighborhood, lat: null, lng: null })
+            }
             this.$router.push('/')
             this.hasImage = false
         }
     },
     computed: {
-        ...mapState('Posts', ['post', 'languages', 'currentUid', 'columnsFlex']),
+        ...mapState('Posts', ['post', 'languages', 'currentUid', 'columnsFlex', 'neighborhoodList']),
         ...mapState('Categories', ['categoriesList']),
         ...mapGetters('Accounts', ['loggedUser']),
         showSubmit(){

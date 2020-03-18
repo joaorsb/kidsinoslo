@@ -4,6 +4,7 @@ import Accounts from '@/features/Accounts/store'
 import Posts from '@/features/Posts/store'
 import Categories from '@/features/Categories/store'
 import Messages from '@/features/Messages/store'
+import Blog from '@/features/Blog/store'
 
 Vue.use(Vuex)
 
@@ -19,5 +20,6 @@ export default new Vuex.Store({
     Posts,
     Categories,
     Messages,
+    Blog,
   }
 })

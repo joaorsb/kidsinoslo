@@ -2,7 +2,9 @@
     <div>
         <v-list>
             <v-list-item-content class="mx-2">
-                <v-list-item-title>Gratis</v-list-item-title>
+                <v-list-item-title>
+                    <span class="subtitle-1 font-weight-medium">Gratis</span>
+                </v-list-item-title>
             </v-list-item-content>
             <v-list-item
                 v-for="(category, index) in freeCategories"
@@ -15,7 +17,9 @@
         <v-divider></v-divider>
         <v-list>
             <v-list-item-content class="mx-2">
-                <v-list-item-title>Betaling</v-list-item-title>
+                <v-list-item-title>
+                    <span class="subtitle-1 font-weight-bold">Betaling</span>
+                </v-list-item-title>
             </v-list-item-content>
             <v-list-item
                 v-for="(category, index) in paidCategories"

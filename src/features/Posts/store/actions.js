@@ -6,7 +6,8 @@ import axios from 'axios'
 const getPosts = async ({commit, state}) => {
     commit('SETLOADINGPOSTS', true)
     const postsRef = firebase.firestore().collection('posts')
-    await postsRef.where("language", "==", state.selectedLanguage).orderBy('createdAt').get().then(snapshot => {
+    await postsRef.where("language", "==", state.selectedLanguage)
+    .orderBy('createdAt').get().then(snapshot => {
         if(snapshot.empty){
             commit('SETPOSTSLIST', [])
             return
@@ -15,9 +16,6 @@ const getPosts = async ({commit, state}) => {
             let post = doc.data()
             post.uid = doc.id
             commit('ADDPOSTTOLIST', post)
-            if(doc.data().neighborhood){
-                commit('ADDTONEIGHBORHOODLIST', doc.data().neighborhood)
-            }
         })
     }).catch(err => {
         commit('SETERRORMESSAGE', err)
@@ -45,9 +43,6 @@ const searchPosts = async ({commit, state}, payload) => {
             let post = doc.data()
             post.uid = doc.id
             commit('ADDPOSTTOLIST', post)
-            if(doc.data().neighborhood){
-                commit('ADDTONEIGHBORHOODLIST', doc.data().neighborhood)
-            }
         })
     }).catch(err => {
         commit('SETERRORMESSAGE', err)
@@ -91,9 +86,6 @@ const getPaginatedPosts = async ({commit, state, rootState}) => {
                 if(post.language == state.selectedLanguage) {
                     commit('ADDPOSTTOPAGINATEDPOSTS', post)
                 }
-                if(doc.data().neighborhood){
-                    commit('ADDTONEIGHBORHOODLIST', doc.data().neighborhood)
-                }
                 
             })
             let nextPage = state.page + 1
@@ -129,9 +121,6 @@ const getPaginatedPosts = async ({commit, state, rootState}) => {
                 }
                 if(post.language === state.selectedLanguage) {
                     commit('ADDMOREPOSTTOPAGINATEDPOSTS', post)
-                }
-                if(doc.data().neighborhood){
-                    commit('ADDTONEIGHBORHOODLIST', doc.data().neighborhood)
                 }
 
             })
@@ -335,6 +324,63 @@ const setErrorMessage = ({commit}, payload) => {
     commit('SETERRORMESSAGE', payload)
 }
 
+const createNeighborhood = async ({ commit }, payload) => {
+    commit('SETLOADINGPOSTS', true)
+
+    await firebase.firestore().collection('neighborhoods')
+    .add(payload).then(() => {
+        commit('ADD_TO_NEIGHBORHOOD_LIST', payload.name)
+
+    }).catch(error => {
+        commit('SETERRORMESSAGE', error)
+    })
+    commit('SETLOADINGPOSTS', false)
+    
+}
+
+const getNeighborhoods = async ({ commit }) => {
+    const neighHood = firebase.firestore().collection('neighborhoods')
+    await neighHood.orderBy('name').get().then(snapshot => {
+        if(snapshot.empty) {
+            commit('SET_NEIGHBORHOOD_LIST', [])
+            return
+        }
+        snapshot.forEach(doc => {
+            commit('ADD_TO_NEIGHBORHOOD_LIST', doc.data().name)
+        })
+    }).catch(error => {
+        commit('SETERRORMESSAGE', error)
+    })
+}
+
+const deleteNeighborhood = async ({ commit }, payload) => {
+    let neighborhood = null
+    await firebase.firestore()
+    .collection('neighborhoods').where('name', '==', payload).get().then(snapshot => {
+        if(! snapshot.empty) {
+            snapshot.forEach(doc => {
+                if(doc.data().name === payload) {
+                    neighborhood = doc.id
+                }
+            })
+        }
+    }).catch(error => {
+        commit('SETERRORMESSAGE', error)
+    })
+
+    if (neighborhood) {
+        await firebase.firestore()
+        .collection('neighborhoods').doc(neighborhood).delete().then(() => {
+            commit('REMOVE_FROM_NEIGHBORHOOD_LIST', payload)
+        })
+
+    }
+}
+
+const setSnackText = ({ commit }, payload) => {
+    commit('SET_SNACK_TEXT', payload)
+}
+
 export default {
     getPosts,
     createPost,
@@ -355,5 +401,9 @@ export default {
     getPostGeolocation,
     closeSnack,
     setNavBarMenu,
-    setErrorMessage
+    setErrorMessage,
+    createNeighborhood,
+    getNeighborhoods,
+    deleteNeighborhood,
+    setSnackText
 }
