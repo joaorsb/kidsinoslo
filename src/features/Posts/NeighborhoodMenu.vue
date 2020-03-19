@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-divider></v-divider>
-        <v-list>
+        <v-list class="grey-bg">
             <v-list-item  @click="showMenu = !showMenu">
                 <v-list-item-title>
                     <span class="title">Strøk/Bydel</span>
@@ -10,7 +10,7 @@
                 </v-list-item-title>
             </v-list-item>
         </v-list>
-        <v-list>
+        <v-list class="grey-bg">
             <div v-show="showMenu">
                 <v-list-item
                     v-for="(neiborhood, index) in sortedNeighborhood"

@@ -7,7 +7,7 @@
             :clipped="true"
           >
             <v-divider></v-divider>
-            <v-list dense>
+            <v-list dense class="grey-bg">
               <v-list-item
                 link
                 v-for="(language, index) in filteredLanguages" v-bind:key="index"
@@ -40,7 +40,7 @@
               </v-list-item>
             </v-list>
             <v-divider></v-divider>
-            <v-list>
+            <v-list class="grey-bg">
               <v-list-item @click="filterAll()">
                   <v-list-item-title>
                     <span class="subtitle-1">Alle aktiviteter</span> 
@@ -127,7 +127,7 @@
               </keep-alive>
             </v-col>
             <v-col  class="hidden-sm-and-down" md="3" >
-              <v-list>
+              <v-list class="grey-bg">
                   <v-list-item @click="filterAll()">
                     <v-list-item-title>
                       <span class="title">Alle aktiviteter</span>
@@ -143,7 +143,7 @@
               <categories-menu></categories-menu>
               <neighborhood-menu></neighborhood-menu>
               <v-divider></v-divider>
-              <v-list v-if="this.loggedUser && this.isAdmin">
+              <v-list v-if="this.loggedUser && this.isAdmin" class="grey-bg">
                   <v-list-item-content class="mx-2">
                       <v-list-item-title>
                         <span class="subtitle-1 font-weight-medium">Admin actions</span>
@@ -322,5 +322,8 @@
 <style >
 .ck-editor__editable_inline {
   min-height: 200px;
+}
+.theme--light.v-sheet.grey-bg {
+ background-color: #f5f5f5 !important;
 }
 </style>

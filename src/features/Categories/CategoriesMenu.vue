@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-list>
+        <v-list class="grey-bg">
             <v-list-item-content class="mx-2">
                 <v-list-item-title>
                     <span class="subtitle-1 font-weight-medium">Gratis</span>
@@ -15,7 +15,7 @@
             </v-list-item>
         </v-list>
         <v-divider></v-divider>
-        <v-list>
+        <v-list class="grey-bg">
             <v-list-item-content class="mx-2">
                 <v-list-item-title>
                     <span class="subtitle-1 font-weight-bold">Betaling</span>
