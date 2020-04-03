@@ -10,8 +10,6 @@
             v-for="(post, i) in randomPosts"
             :key="i"
             :src="post.imageUrl"
-            reverse-transition="fade-transition"
-            transition="fade-transition"
             @click="selectPost(i)"
             >
                 <v-row
@@ -49,7 +47,7 @@ export default {
             if(! post.lat || ! post.lng) {
                 this.getPostGeolocation()
             }
-            this.$router.push({name: "post-detail", params: {slug: post.slug }}).catch(() => {})
+            this.$router.push({name: "post-detail", params: { slug: post.slug }}).catch(() => {})
         }
     },
     computed: {

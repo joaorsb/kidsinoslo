@@ -1,76 +1,76 @@
 <template>
   <v-app>
     <v-navigation-drawer
-            v-model="navBarMenu"
-            disable-resize-watcher
-            app
-            :clipped="true"
-          >
-            <v-divider></v-divider>
-            <v-list dense class="grey-bg">
-              <v-list-item
-                link
-                v-for="(language, index) in filteredLanguages" v-bind:key="index"
-                @click="setSelectedLanguague(language.value)"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>{{language.name}}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item
-                link
-                @click="contact()"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>Kontakt</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item
-                link
-                v-for="item in menuItems" v-bind:key="item.title"
-                :to=item.url
-              >
-                <v-list-item-icon>
-                  <v-icon>{{item.icon}}</v-icon>
-                </v-list-item-icon>
+      v-model="navBarMenu"
+      disable-resize-watcher
+      app
+      :clipped="true"
+    >
+      <v-divider></v-divider>
+      <v-list dense class="grey-bg">
+        <v-list-item
+          link
+          v-for="(language, index) in filteredLanguages" v-bind:key="index"
+          @click="setSelectedLanguague(language.value)"
+        >
+          <v-list-item-content>
+            <v-list-item-title>{{language.name}}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+          link
+          @click="contact()"
+        >
+          <v-list-item-content>
+            <v-list-item-title>Kontakt</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+          link
+          v-for="item in menuItems" v-bind:key="item.title"
+          :to=item.url
+        >
+          <v-list-item-icon>
+            <v-icon>{{item.icon}}</v-icon>
+          </v-list-item-icon>
 
-                <v-list-item-content >
-                  <v-list-item-title>{{item.title}}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-            <v-divider></v-divider>
-            <v-list class="grey-bg">
-              <v-list-item @click="filterAll()">
-                  <v-list-item-title>
-                    <span class="subtitle-1">Alle aktiviteter</span> 
-                  </v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="blog()">
-                  <v-list-item-title>
-                    <span class="subtitle-1">Blog</span> 
-                  </v-list-item-title>
-              </v-list-item>
-            </v-list>
-            <categories-menu></categories-menu>
-            <neighborhood-menu></neighborhood-menu>
-            <div v-if="this.loggedUser.role !== null">
-              <v-list v-if="isAdmin">
-                  <v-list-item-content  class="mx-2">
-                      <v-list-item-title>Admin area</v-list-item-title>
-                  </v-list-item-content>
-                  <v-list-item
-                    link
-                    v-for="item in menuAdmin" v-bind:key="item.title"
-                    :to=item.url
-                  >
-                    <v-list-item-content>
-                      <v-list-item-title>{{item.title}}</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-              </v-list>
-            </div>
-        </v-navigation-drawer>
+          <v-list-item-content >
+            <v-list-item-title>{{item.title}}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <v-divider></v-divider>
+      <v-list class="grey-bg">
+        <v-list-item @click="filterAll()">
+            <v-list-item-title>
+              <span class="subtitle-1">Alle aktiviteter</span> 
+            </v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="blog()">
+            <v-list-item-title>
+              <span class="subtitle-1">Blog</span> 
+            </v-list-item-title>
+        </v-list-item>
+      </v-list>
+      <categories-menu></categories-menu>
+      <neighborhood-menu></neighborhood-menu>
+      <div v-if="this.loggedUser.role !== null">
+        <v-list v-if="isAdmin">
+            <v-list-item-content  class="mx-2">
+                <v-list-item-title>Admin area</v-list-item-title>
+            </v-list-item-content>
+            <v-list-item
+              link
+              v-for="item in menuAdmin" v-bind:key="item.title"
+              :to=item.url
+            >
+              <v-list-item-content>
+                <v-list-item-title>{{item.title}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+        </v-list>
+      </div>
+    </v-navigation-drawer>
     <v-app-bar app elevate-on-scroll>
         <v-app-bar-nav-icon @click.native.stop="navBarMenu = ! navBarMenu" 
           class="hidden-md-and-up">
@@ -140,8 +140,11 @@
                   </v-list-item>
               </v-list>
               <v-divider></v-divider>
+
               <categories-menu></categories-menu>
+              
               <neighborhood-menu></neighborhood-menu>
+
               <v-divider></v-divider>
               <v-list v-if="this.loggedUser && this.isAdmin" class="grey-bg">
                   <v-list-item-content class="mx-2">
