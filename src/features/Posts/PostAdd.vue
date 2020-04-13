@@ -56,6 +56,11 @@
             v-model="post.availableforCarousel"
             label="Should be at Carousel?"
         ></v-switch>
+
+        <v-switch
+            v-model="post.outdoor"
+            label="Outdoor activity?"
+        ></v-switch>
         
         <v-row>
             <v-col cols="12" class="editor-text">

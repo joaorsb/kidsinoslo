@@ -35,6 +35,7 @@
                 </v-img>
                 <v-card-title v-text="this.selectedPost.title"></v-card-title>
                 <v-card-text v-text="category.name"></v-card-text>
+                <v-card-text v-text="outdoorText"></v-card-text>
             </v-card>
             <v-divider class="py-5"></v-divider>     
             <section>
@@ -131,6 +132,9 @@ export default {
         ...mapState('Posts', ['selectedPost']),
         category() {
             return this.categoriesList.filter(category => category.uid == this.selectedPost.category)[0]
+        },
+        outdoorText() {
+            return this.selectedPost.outdoor ? "Outdoor" : "Indoor"
         }
     },
     beforeDestroy() {

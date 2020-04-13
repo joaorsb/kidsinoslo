@@ -46,6 +46,16 @@
               <span class="subtitle-1">Alle aktiviteter</span> 
             </v-list-item-title>
         </v-list-item>
+        <v-list-item @click="indoor()">
+          <v-list-item-title>
+            <span class="title">Inne Aktiviteter</span>
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="outdoor()">
+          <v-list-item-title>
+            <span class="title">Ute Aktiviteter</span>
+          </v-list-item-title>
+        </v-list-item>
         <v-list-item @click="blog()">
             <v-list-item-title>
               <span class="subtitle-1">Blog</span> 
@@ -133,6 +143,16 @@
                       <span class="title">Alle aktiviteter</span>
                     </v-list-item-title>
                   </v-list-item>
+                  <v-list-item @click="indoor()">
+                    <v-list-item-title>
+                      <span class="title">Inne Aktiviteter</span>
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="outdoor()">
+                    <v-list-item-title>
+                      <span class="title">Ute Aktiviteter</span>
+                    </v-list-item-title>
+                  </v-list-item>
                   <v-list-item @click="blog()">
                     <v-list-item-title>
                       <span class="title">Blog</span>
@@ -195,12 +215,14 @@
         'setPaginationPage',
         'clearPaginatedPosts',
         'setLanguage',
-        'getNeighborhoods'
+        'getNeighborhoods',
+        'setSelectedPlace'
       ]),
       filterAll() {
             this.setPaginationPage(1)
             this.clearPaginatedPosts()
             this.setSelectedCategory(null)
+            this.setSelectedPlace(null)
             this.setSelectedNeighborhood(null)
             this.getPaginatedPosts()
             if(this.$router.history.current.path !== '/'){
@@ -213,11 +235,12 @@
           this.setPaginationPage(1)
           this.clearPaginatedPosts()
           this.setSelectedCategory(null)
+          this.setSelectedPlace(null)
           this.setSelectedNeighborhood(null)
           this.getPaginatedPosts()
           if(this.$router.history.current.path !== '/'){
-                this.$router.push('/')
-            }
+            this.$router.push('/')
+          }
         },
         getDarkMode() {
           return JSON.parse(localStorage.getItem('darkMode'))
@@ -234,6 +257,28 @@
         },
         blog() {
           this.$router.push('/blog')
+        },
+        outdoor() {
+          this.setSelectedPlace(true)
+          this.setPaginationPage(1)
+          this.clearPaginatedPosts()
+          this.setSelectedCategory(null)
+          this.setSelectedNeighborhood(null)
+          this.getPaginatedPosts()
+          if(this.$router.history.current.path !== '/'){
+            this.$router.push('/')
+          }
+        },
+        indoor() {
+          this.setSelectedPlace(false)
+          this.setPaginationPage(1)
+          this.clearPaginatedPosts()
+          this.setSelectedCategory(null)
+          this.setSelectedNeighborhood(null)
+          this.getPaginatedPosts()
+          if(this.$router.history.current.path !== '/'){
+            this.$router.push('/')
+          }
         }
     },
     created() {
@@ -322,7 +367,7 @@
     },
   };
 </script>
-<style >
+<style>
 .ck-editor__editable_inline {
   min-height: 200px;
 }

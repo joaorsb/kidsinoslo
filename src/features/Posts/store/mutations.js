@@ -93,6 +93,10 @@ const SET_NAV_BAR_MENU = (state) => {
     state.navBarMenu = ! state.navBarMenu
 }
 
+const SET_SELECTED_PLACE = (state, payload) => {
+    state.selectedPlace = payload
+}
+
 export default {
     SETSELECTEDPOST,
     SETPOSTSLIST,
@@ -116,4 +120,5 @@ export default {
     SET_NAV_BAR_MENU,
     SET_NEIGHBORHOOD_LIST,
     REMOVE_FROM_NEIGHBORHOOD_LIST,
+    SET_SELECTED_PLACE,
 }

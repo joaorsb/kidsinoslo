@@ -125,6 +125,10 @@
                                             v-model="selectedPost.availableforCarousel"
                                             label="Should be at Carousel?"
                                         ></v-switch>
+                                        <v-switch
+                                            v-model="selectedPost.outdoor"
+                                            label="Outdoor activity?"
+                                        ></v-switch>
                                     </v-col>
                                     <v-col cols="12">
                                         <v-row>
@@ -256,7 +260,8 @@ export default {
             'searchPosts',
             'updatePostImage',
             'deletePostImage',
-            'clearPostsList'
+            'clearPostsList',
+            'createNeighborhood'
         ]),
         selectPost(index) {
             const post = this.postsList[index]

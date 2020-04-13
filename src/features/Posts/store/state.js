@@ -17,6 +17,7 @@ export default {
         imageName: null,
         siteUrl: null,
         availableforCarousel: false,
+        outdoor: true,
     },
     postsList: [],
     snackText: '',
@@ -43,4 +44,5 @@ export default {
         lat: null,
         lng: null
     },
+    selectedPlace: null
 }

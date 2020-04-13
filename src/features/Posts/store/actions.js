@@ -58,6 +58,12 @@ const getPaginatedPosts = async ({commit, state, rootState}) => {
     } else if(rootState.Categories.selectedCategory){
         postsRef = firebase.firestore().collection('posts')
         .where('category', '==', rootState.Categories.selectedCategory.uid)
+    } else if(state.selectedPlace === true){
+        postsRef = firebase.firestore().collection('posts')
+        .where('outdoor', '==', true)
+    } else if(state.selectedPlace === false){
+        postsRef = firebase.firestore().collection('posts')
+        .where('outdoor', '==', false)
     } else {
         postsRef = firebase.firestore().collection('posts')
     }
@@ -211,7 +217,8 @@ const editPost = async ({commit}, payload) => {
         language: payload.language,
         slug: payload.slug,
         siteUrl: payload.siteUrl,
-        availableforCarousel: false,
+        availableforCarousel: payload.availableforCarousel,
+        outdoor: payload.outdoor
     })
     .then(() => {
         commit('REPLACEPOSTFROMLIST', payload)
@@ -381,6 +388,10 @@ const setSnackText = ({ commit }, payload) => {
     commit('SET_SNACK_TEXT', payload)
 }
 
+const setSelectedPlace = ({ commit }, payload) => {
+    commit('SET_SELECTED_PLACE', payload)
+}
+
 export default {
     getPosts,
     createPost,
@@ -405,5 +416,6 @@ export default {
     createNeighborhood,
     getNeighborhoods,
     deleteNeighborhood,
-    setSnackText
+    setSnackText,
+    setSelectedPlace
 }

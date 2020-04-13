@@ -41,13 +41,15 @@ export default {
             'setSelectedNeighborhood', 
             'getPaginatedPosts', 
             'clearPaginatedPosts',
-            'setPaginationPage'
-            ]),
+            'setPaginationPage',
+            'setSelectedPlace'
+        ]),
         ...mapActions('Categories', ['setSelectedCategory']),
         filterNeighborhood(index) {
             this.setPaginationPage(1)
             this.clearPaginatedPosts()
             this.setSelectedCategory(null)
+            this.setSelectedPlace(null)
             const neighborhood = this.sortedNeighborhood[index]
             // console.log(neighborhood)
             this.setSelectedNeighborhood(neighborhood)

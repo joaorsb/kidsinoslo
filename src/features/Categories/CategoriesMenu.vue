@@ -45,12 +45,14 @@ export default {
             'setSelectedNeighborhood', 
             'getPaginatedPosts', 
             'clearPaginatedPosts',
-            'setPaginationPage'
-            ]),
+            'setPaginationPage',
+            'setSelectedPlace'
+        ]),
         filterPaid(index) {
             this.setPaginationPage(1)
             this.clearPaginatedPosts()
             this.setSelectedNeighborhood(null)
+            this.setSelectedPlace(null)
             const category = this.paidCategories[index]
             this.setSelectedCategory(category)
             this.getPaginatedPosts()

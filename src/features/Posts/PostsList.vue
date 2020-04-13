@@ -1,12 +1,12 @@
 <template>
-    <div class="mx-auto">
+    <div class="mx-auto mt-0">
         <v-skeleton-loader
             :loading="loadingPosts"
             :transition="transition"
             height="94"
             type="list-item-two-line"
           >
-          <v-container v-if="this.paginatedPosts.length > 0">
+          <v-container class="posts" v-if="this.paginatedPosts.length > 0">
               <v-row dense>
                   <v-col
                     v-for="(post, index) in this.paginatedPosts"
@@ -78,3 +78,8 @@
     },
   }
 </script>
+<style scoped>
+  .posts {
+    padding-top: 0 !important;
+  }
+</style>
