@@ -1,5 +1,6 @@
 import * as firebase from 'firebase/app'
 import 'firebase/firestore'
+import 'firebase/storage'
 
 const getMessages = async ({ commit }) => {
     const messagesRef = firebase.firestore().collection('messages')
@@ -11,6 +12,11 @@ const getMessages = async ({ commit }) => {
         snapshot.forEach(doc => {
             let message = doc.data()
             message.uid = doc.id
+			message.imageUrl = ""
+			if(message.hasImage) {
+				const baseImageUri = `https://firebasestorage.googleapis.com/v0/b/kids-in-oslo.appspot.com/o/messages%2F${message.uid}%2F`
+				message.imageUrl = `${baseImageUri}${message.imageName}?alt=media`
+			}
             commit('ADD_TO_MESSAGES_LIST', message)
         })
     }).catch(err => {
@@ -19,10 +25,19 @@ const getMessages = async ({ commit }) => {
 }
 
 const createMessage = async ({commit}, payload) => {
+	let image = null
+	if(payload.image) {
+		image = payload.image
+		delete payload.image
+	}
     payload.createdAt = new Date()
     await firebase.firestore().collection('messages').add(payload).then(messageRef => {
         payload.uid = messageRef.id
         commit('ADD_TO_MESSAGES_LIST', payload)
+		if(image) {
+			const storageRef = firebase.storage().ref().child(`messages/${payload.uid}/${image.info.name}`)
+			storageRef.putString(image.dataUrl, 'data_url')
+		}
 
     }).catch(error => {
         commit('SET_ERROR', error)
@@ -36,6 +51,10 @@ const deleteMessage = async ({ commit }, payload) => {
     .then(() => {
         commit('REMOVE_FROM_MESSAGES_LIST', payload)
         commit('SET_SELECTED_MESSAGE', null)
+		if(payload.hasImage) {
+			const storageRef = firebase.storage().ref().child(`messages/${payload.uid}/${payload.imageName}`)
+			storageRef.delete()
+		}
     })    
     .catch(function(err) {
         commit('SET_ERROR', err.message)

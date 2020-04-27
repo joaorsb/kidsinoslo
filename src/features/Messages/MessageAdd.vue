@@ -15,6 +15,7 @@
         <v-form
             ref="form"
             lazy-validation
+			enctype="multipart/form-data"
         >
             <v-container>
                 <v-row class="d-flex justify-center">
@@ -47,6 +48,11 @@
                             outlined
                         >
                         </v-text-field>
+						<image-uploader
+							:quality="0.9"
+							:autoRotate="true"
+							outputFormat="verbose" :preview=true :className="['fileinput', {'fileinput--loaded' : hasImage }]" :capture="false" accept="image/*" doNotResize="['gif', 'svg']" @input="setImage">
+						</image-uploader>
                         <v-btn 
                             class="mr-4 float-right" 
                             :disabled=" ! showSubmit" 
@@ -67,12 +73,26 @@ export default {
     name: "MessageAdd",
     data() {
         return {
+			photo: null,
+			hasImage: false
         }
     },
     methods: {
         ...mapActions('Messages', ['createMessage']),
+		setImage(file) {
+			if(file) {
+				this.hasImage = true
+				this.photo = file
+			}
+		},
         submit(event) {
             event.preventDefault();
+			if(this.hasImage) {
+				this.photo.info.name.replace('.JPG', '.jpg')
+				this.message.hasImage = this.hasImage
+				this.message.imageName = this.photo.info.name.replace(' ', '_')
+				this.message.image = this.photo
+			}
             this.createMessage(this.message)
             this.$router.push('/admin/messages')
         },

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <h2 class="d-inline">New Messages: {{ unreadMessages.length}}</h2> 
+            <h2 class="d-inline">New Messages: {{ unreadMessages.length }}</h2> 
         </div>
         <v-divider></v-divider>
 
@@ -15,7 +15,7 @@
                         <v-btn  text
                         @click="selectMessage(index)" 
                     >
-                        {{ message.title }} - {{ message.createdAt | luxon:format('dd-MM-yyyy', { serverFormat: 'sql' }) }}
+                        {{ message.title }}
                     </v-btn> 
                     </v-list-item-title>
                     <v-btn text  
@@ -59,8 +59,15 @@
         </v-list>
         <div v-if="this.selectedMessage">
             <v-row justify="center">
-                <v-dialog v-model="dialogEdit" max-width="400">
+                <v-dialog v-model="dialogEdit" max-width="800">
                     <v-card class="mx-auto">
+						<v-img :src="selectedMessage.imageUrl" v-if="selectedMessage.hasImage">
+							<template>
+								<v-row class="fill-height ma-0" align="center" justify="center">
+									<v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+								</v-row>
+							</template>
+						</v-img>
                         <v-card-title>
                             <div class="my-3">
                                 <h3 class="d-inline">{{ selectedMessage.title }}</h3> 
@@ -104,7 +111,10 @@ export default {
         ...mapActions('Messages', ['getMessages','setSelectedMessage', 'updateMessage', 'deleteMessage']),
         selectMessage(index) {
             this.dialogEdit = true
-            const message = this.unreadMessages[index]
+            let message = this.unreadMessages[index]
+			if (! message) {
+				message = this.readMessages[index]
+			}
 
             this.setSelectedMessage(message)
             if (message.read === false) {

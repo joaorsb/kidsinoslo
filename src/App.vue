@@ -48,12 +48,12 @@
         </v-list-item>
         <v-list-item @click="indoor()">
           <v-list-item-title>
-            <span class="title">Inne Aktiviteter</span>
+            <span class="title">Inneaktiviteter</span>
           </v-list-item-title>
         </v-list-item>
         <v-list-item @click="outdoor()">
           <v-list-item-title>
-            <span class="title">Ute Aktiviteter</span>
+            <span class="title">Uteaktiviteter</span>
           </v-list-item-title>
         </v-list-item>
         <v-list-item @click="blog()">
@@ -145,12 +145,12 @@
                   </v-list-item>
                   <v-list-item @click="indoor()">
                     <v-list-item-title>
-                      <span class="title">Inne Aktiviteter</span>
+                      <span class="title">Inneaktiviteter</span>
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item @click="outdoor()">
                     <v-list-item-title>
-                      <span class="title">Ute Aktiviteter</span>
+                      <span class="title">Uteaktiviteter</span>
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item @click="blog()">

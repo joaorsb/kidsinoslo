@@ -6,7 +6,9 @@ export default {
         name: '',
         email: '',
         read: false,
-        createdAt: null
+        createdAt: null,
+		hasImage: false,
+		imageName: '',
     },
     messagesList: [],
     errorMessage: '',

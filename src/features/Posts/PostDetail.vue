@@ -34,7 +34,14 @@
                     </template>
                 </v-img>
                 <v-card-title v-text="this.selectedPost.title"></v-card-title>
-                <v-card-text v-text="category.name"></v-card-text>
+                <v-card-text >
+                    {{category.name}}
+                    <span v-if="category.type === 'Paid'">
+                       <v-icon>mdi-cash-usd-outline</v-icon>
+                        <v-icon>mdi-cash-usd-outline</v-icon>
+                        <v-icon>mdi-cash-usd-outline</v-icon>
+                    </span>
+                </v-card-text>
                 <v-card-text v-text="outdoorText"></v-card-text>
             </v-card>
             <v-divider class="py-5"></v-divider>     
