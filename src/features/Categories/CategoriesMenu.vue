@@ -1,13 +1,16 @@
 <template>
     <div>
+        <v-divider></v-divider>
         <v-list class="grey-bg">
-            <v-list-item-content class="mx-2">
-                <v-list-item-title @click="showGratis = !showGratis">
-                    <span class="subtitle-1 font-weight-medium">Gratis</span>
+            <v-list-item  @click="showGratis = !showGratis">
+                <v-list-item-title>
+                    <span class="title">Gratis</span>
                     <v-icon v-show=" ! showGratis">mdi-arrow-down</v-icon>
                     <v-icon v-show="showGratis">mdi-arrow-up</v-icon>
                 </v-list-item-title>
-            </v-list-item-content>
+            </v-list-item>
+        </v-list>
+        <v-list class="grey-bg">
             <div v-show="showGratis">
                 <v-list-item
                     v-for="(category, index) in freeCategories"
@@ -20,13 +23,15 @@
         </v-list>
         <v-divider></v-divider>
         <v-list class="grey-bg">
-            <v-list-item-content class="mx-2">
-                <v-list-item-title @click="showPaid = !showPaid">
-                    <span class="subtitle-1 font-weight-bold">Betaling</span>
+            <v-list-item  @click="showPaid = !showPaid">
+                <v-list-item-title>
+                    <span class="title">Betaling</span>
                     <v-icon v-show=" ! showPaid">mdi-arrow-down</v-icon>
                     <v-icon v-show="showPaid">mdi-arrow-up</v-icon>
                 </v-list-item-title>
-            </v-list-item-content>
+            </v-list-item>
+        </v-list>
+        <v-list class="grey-bg">
             <div v-show="showPaid">
                 <v-list-item
                     v-for="(category, index) in paidCategories"
@@ -92,3 +97,6 @@ export default {
     }, 
 }
 </script>
+<style scoped>
+    .v-list { padding: 0px;}
+</style>
