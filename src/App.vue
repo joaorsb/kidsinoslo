@@ -22,7 +22,7 @@
           @click="contact()"
         >
           <v-list-item-content>
-            <v-list-item-title>Kontakt</v-list-item-title>
+            <v-list-item-title>Tips Oss!</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item
@@ -109,9 +109,10 @@
           <v-btn 
             text
             small
+            color="orange accent-4"
             active-class="v-btn--active"
             @click="contact()">
-            <span class="mr-2">Kontakt</span>
+            <span class="mr-2">Tips Oss!</span>
           </v-btn>
         </v-toolbar-items>
         <v-toolbar-items class="hidden-sm-and-down">
